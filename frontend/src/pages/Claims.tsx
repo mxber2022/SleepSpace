@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Coins,
-  Calendar,
-  Trophy,
-  Star,
-  ChevronRight,
-  Gift,
-  Shield,
-  Loader2,
-  BedDouble,
-  ArrowRight,
-  Sparkles,
-} from "lucide-react";
+import { Coins, Calendar, Trophy, Activity, ChevronRight, Gift, Shield, Loader2, BedDouble, ArrowRight, Heart, HeartPulse as Pulse, Sparkles, Star } from 'lucide-react';
 import { format, parseISO } from "date-fns";
 import { useAuth } from "../context/AuthContext";
 
@@ -434,7 +422,7 @@ export function Claims() {
                           {claimingId === sleep.id ? (
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                           ) : (
-                            <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                           <></>
                           )}
                         </div>
                       </button>
