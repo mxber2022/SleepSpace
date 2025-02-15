@@ -6,11 +6,12 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["lucide-react"],
   },
-   // ... existing code ...
+  // ... existing code ...
   server: {
     proxy: {
       "/api": {
-        target: "https://sleepspace.onrender.com",
+        // target: "https://sleepspace.onrender.com",
+        target: "http://localhost:3001",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         configure: (proxy, _options) => {
@@ -18,10 +19,10 @@ export default defineConfig({
             console.error("Proxy Error:", {
               message: err.message,
               url: req.url,
-              statusCode: res?.statusCode
+              statusCode: res?.statusCode,
             });
             if (!res.headersSent) {
-              res.writeHead(500, { 'Content-Type': 'application/json' });
+              res.writeHead(500, { "Content-Type": "application/json" });
             }
             res.end(JSON.stringify({ error: "Proxy error occurred" }));
           });
@@ -29,19 +30,19 @@ export default defineConfig({
             console.log("Sending Request:", {
               method: req.method,
               url: req.url,
-              headers: req.headers
+              headers: req.headers,
             });
           });
           proxy.on("proxyRes", (proxyRes, req, _res) => {
             console.log("Received Response:", {
               status: proxyRes.statusCode,
               url: req.url,
-              headers: proxyRes.headers
+              headers: proxyRes.headers,
             });
           });
         },
       },
     },
   },
-// ... existing code ...
+  // ... existing code ...
 });
