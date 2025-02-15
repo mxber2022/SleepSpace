@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Moon, Menu, Sparkles, Trophy, Target, Coins, Loader2, User, LogOut, ChevronDown, Check } from 'lucide-react';
+import { Moon, Menu, Sparkles, Trophy, Target, Coins, Loader2, User, LogOut, ChevronDown, Check, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export function Navigation() {
@@ -53,7 +53,7 @@ export function Navigation() {
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin text-primary-500" />
                   ) : (
-                    <Sparkles className="w-4 h-4 text-primary-500 group-hover:text-primary-600 transition-colors" />
+                    <Activity className="w-4 h-4 text-primary-500 group-hover:text-primary-600 transition-colors" />
                   )}
                   <span className="text-sm font-medium text-primary-600 group-hover:text-primary-700 transition-colors">
                     Connect Device
