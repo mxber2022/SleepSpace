@@ -49,6 +49,7 @@ app.use(
       path: "/",
     },
     name: "sleep2earn.sid",
+    proxy: true
   })
 );
 
