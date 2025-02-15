@@ -14,6 +14,11 @@ import {
   Sparkles,
   Shield,
   BedDouble,
+  Sunset,
+  Sunrise,
+  Zap,
+  Waves,
+  AlertCircle,
 } from "lucide-react";
 import { format, parseISO, subDays } from "date-fns";
 import {
@@ -41,6 +46,7 @@ interface SleepData {
       total_light_sleep_time_milli: number;
       total_slow_wave_sleep_time_milli: number;
       total_rem_sleep_time_milli: number;
+      total_awake_time_milli: number;
       sleep_cycle_count: number;
       disturbance_count: number;
     };
@@ -197,11 +203,11 @@ export function Sleep() {
     );
   }
 
-  const formatDuration = (milliseconds: number) => {
-    const hours = Math.floor(milliseconds / (1000 * 60 * 60));
-    const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours}h ${minutes}m`;
-  };
+  // const formatDuration = (milliseconds: number) => {
+  //   const hours = Math.floor(milliseconds / (1000 * 60 * 60));
+  //   const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+  //   return `${hours}h ${minutes}m`;
+  // };
 
   const formatHours = (milliseconds: number) => {
     return (milliseconds / (1000 * 60 * 60)).toFixed(1);
@@ -250,6 +256,23 @@ export function Sleep() {
     } else if (direction === "next" && currentIndex > 0) {
       setSelectedSleep(sleepData[currentIndex - 1]);
     }
+  };
+
+  const formatDuration = (milliseconds: number) => {
+    const hours = Math.floor(milliseconds / (1000 * 60 * 60));
+    const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours}h ${minutes}m`;
+  };
+
+  const formatPercentage = (value: number, total: number) => {
+    return `${Math.round((value / total) * 100)}%`;
+  };
+
+  const getQualityIndicator = (score: number) => {
+    if (score >= 90) return { color: 'text-green-600', bg: 'bg-green-50', text: 'Excellent' };
+    if (score >= 80) return { color: 'text-primary-600', bg: 'bg-primary-50', text: 'Good' };
+    if (score >= 70) return { color: 'text-yellow-600', bg: 'bg-yellow-50', text: 'Fair' };
+    return { color: 'text-red-600', bg: 'bg-red-50', text: 'Poor' };
   };
 
   return (
@@ -514,57 +537,208 @@ export function Sleep() {
                 )}
 
                 {/* Sleep History */}
-                <div className="space-y-4">
-                  <h2 className="text-lg font-semibold text-night-900">
-                    Sleep History
-                  </h2>
-                  {sleepData.map((sleep) => (
-                    <button
-                      key={sleep.id}
-                      onClick={() => setSelectedSleep(sleep)}
-                      className={`w-full text-left group relative bg-white rounded-xl p-6 ring-1 ${
-                        selectedSleep?.id === sleep.id
-                          ? "ring-primary-400 bg-primary-50/10"
-                          : "ring-primary-100"
-                      } hover:ring-primary-300 transition-all duration-300`}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-                      <div className="relative flex items-center justify-between">
-                        <div>
-                          <div className="text-sm text-night-600 mb-1">
-                            {format(
-                              parseISO(sleep.start),
-                              "EEEE, MMMM d, yyyy"
-                            )}
-                          </div>
-                          <div className="flex items-center gap-4 text-night-600">
-                            <span>
-                              {format(parseISO(sleep.start), "h:mm a")} -{" "}
-                              {format(parseISO(sleep.end), "h:mm a")}
+                
+      {/* <div className="container mx-auto px-4"> */}
+        {/* <div className="max-w-6xl mx-auto space-y-8"> */}
+          {/* <div className="bg-white rounded-2xl p-8 shadow-lg ring-1 ring-primary-100"> */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-night-900">Sleep History</h2>
+              <div className="text-sm text-night-600">
+                Showing last {sleepData.length} records
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              {sleepData.map((sleep) => {
+                const score = Math.round(sleep.score.sleep_performance_percentage);
+                const quality = getQualityIndicator(score);
+                const totalSleepTime = sleep.score.stage_summary.total_in_bed_time_milli;
+                
+                return (
+                  <div
+                    key={sleep.id}
+                    className="group relative bg-white rounded-xl p-6 ring-1 ring-primary-100 hover:ring-primary-300 transition-all duration-300 hover:-translate-y-0.5"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+                    
+                    <div className="relative mb-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-primary-500" />
+                            <span className="text-night-600 font-medium">
+                              {format(parseISO(sleep.start), "EEEE, MMMM d")}
                             </span>
-                            <span className="text-primary-600">
-                              {formatDuration(
-                                sleep.score.stage_summary
-                                  .total_in_bed_time_milli
-                              )}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Sunset className="w-4 h-4 text-primary-500" />
+                            <span className="text-night-600">
+                              {format(parseISO(sleep.start), "h:mm a")}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Sunrise className="w-4 h-4 text-primary-500" />
+                            <span className="text-night-600">
+                              {format(parseISO(sleep.end), "h:mm a")}
                             </span>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-3xl font-bold text-primary-600">
-                            {Math.round(
-                              sleep.score.sleep_performance_percentage
-                            )}
-                            %
+                        <div className={`px-3 py-1 rounded-full ${quality.bg} ${quality.color} font-medium text-sm flex items-center gap-1.5`}>
+                          <Activity className="w-4 h-4" />
+                          <span>{quality.text} ({score}%)</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-4 gap-6 mb-6">
+                      <div className="bg-night-50/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <BedDouble className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm font-medium text-night-600">Total Sleep</span>
+                        </div>
+                        <div className="font-bold text-night-900">
+                          {formatDuration(totalSleepTime)}
+                        </div>
+                        <div className="text-xs text-night-600 mt-1">
+                          {Math.round(sleep.score.sleep_efficiency_percentage)}% efficiency
+                        </div>
+                      </div>
+
+                      <div className="bg-night-50/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Brain className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm font-medium text-night-600">Sleep Cycles</span>
+                        </div>
+                        <div className="font-bold text-night-900">
+                          {sleep.score.stage_summary.sleep_cycle_count} cycles
+                        </div>
+                        <div className="text-xs text-night-600 mt-1">
+                          {sleep.score.stage_summary.disturbance_count} disturbances
+                        </div>
+                      </div>
+
+                      <div className="bg-night-50/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Waves className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm font-medium text-night-600">Respiratory Rate</span>
+                        </div>
+                        <div className="font-bold text-night-900">
+                          {sleep.score.respiratory_rate.toFixed(1)} bpm
+                        </div>
+                        <div className="text-xs text-night-600 mt-1">
+                          Breaths per minute
+                        </div>
+                      </div>
+
+                      <div className="bg-night-50/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Zap className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm font-medium text-night-600">Consistency</span>
+                        </div>
+                        <div className="font-bold text-night-900">
+                          {Math.round(sleep.score.sleep_consistency_percentage)}%
+                        </div>
+                        <div className="text-xs text-night-600 mt-1">
+                          Sleep schedule adherence
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-night-50/30 rounded-xl p-6">
+                      <h3 className="text-sm font-medium text-night-700 mb-4">Sleep Stages Distribution</h3>
+                      <div className="grid md:grid-cols-4 gap-4">
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm text-night-600">Light Sleep</span>
+                            <span className="text-sm font-medium text-night-900">
+                              {formatPercentage(sleep.score.stage_summary.total_light_sleep_time_milli, totalSleepTime)}
+                            </span>
                           </div>
-                          <div className="text-sm text-night-600">
-                            Performance
+                          <div className="h-2 bg-night-100 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-primary-300 rounded-full"
+                              style={{ width: `${(sleep.score.stage_summary.total_light_sleep_time_milli / totalSleepTime) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm text-night-600">Deep Sleep</span>
+                            <span className="text-sm font-medium text-night-900">
+                              {formatPercentage(sleep.score.stage_summary.total_slow_wave_sleep_time_milli, totalSleepTime)}
+                            </span>
+                          </div>
+                          <div className="h-2 bg-night-100 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-primary-500 rounded-full"
+                              style={{ width: `${(sleep.score.stage_summary.total_slow_wave_sleep_time_milli / totalSleepTime) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm text-night-600">REM Sleep</span>
+                            <span className="text-sm font-medium text-night-900">
+                              {formatPercentage(sleep.score.stage_summary.total_rem_sleep_time_milli, totalSleepTime)}
+                            </span>
+                          </div>
+                          <div className="h-2 bg-night-100 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-primary-400 rounded-full"
+                              style={{ width: `${(sleep.score.stage_summary.total_rem_sleep_time_milli / totalSleepTime) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm text-night-600">Awake</span>
+                            <span className="text-sm font-medium text-night-900">
+                              {formatPercentage(sleep.score.stage_summary.total_awake_time_milli, totalSleepTime)}
+                            </span>
+                          </div>
+                          <div className="h-2 bg-night-100 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-night-300 rounded-full"
+                              style={{ width: `${(sleep.score.stage_summary.total_awake_time_milli / totalSleepTime) * 100}%` }}
+                            ></div>
                           </div>
                         </div>
                       </div>
-                    </button>
-                  ))}
-                </div>
+
+                      <div className="mt-6 flex items-center gap-4">
+                        {sleep.score.stage_summary.disturbance_count > 0 && (
+                          <div className="flex items-center gap-1.5 text-yellow-600 bg-yellow-50 px-3 py-1.5 rounded-lg text-sm">
+                            <AlertCircle className="w-4 h-4" />
+                            <span>{sleep.score.stage_summary.disturbance_count} sleep disturbances</span>
+                          </div>
+                        )}
+                        {sleep.score.sleep_consistency_percentage >= 90 && (
+                          <div className="flex items-center gap-1.5 text-green-600 bg-green-50 px-3 py-1.5 rounded-lg text-sm">
+                            <Sparkles className="w-4 h-4" />
+                            <span>Excellent sleep consistency</span>
+                          </div>
+                        )}
+                        {sleep.score.sleep_efficiency_percentage >= 90 && (
+                          <div className="flex items-center gap-1.5 text-primary-600 bg-primary-50 px-3 py-1.5 rounded-lg text-sm">
+                            <Zap className="w-4 h-4" />
+                            <span>High sleep efficiency</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          {/* </div> */}
+        {/* </div> */}
+      {/* </div> */}
+      <div className="">
+    </div>
+
               </div>
             )}
           </div>
