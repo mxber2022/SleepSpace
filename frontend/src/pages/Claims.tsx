@@ -368,7 +368,7 @@ export function Claims() {
 
           <div className="bg-white rounded-2xl p-8 shadow-lg ring-1 ring-primary-100">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-night-900">Recent Sleep Records</h2>
+              <h2 className="text-xl font-bold text-night-900">Tokens to be claimed</h2>
               <div className="text-sm text-night-600">
                 Showing last {sleepData.length} records
               </div>
