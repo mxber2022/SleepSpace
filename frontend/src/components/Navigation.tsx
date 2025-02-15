@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Moon, Menu, Sparkles, Trophy, Target, Coins, Loader2, User, LogOut, ChevronDown, Check, Activity } from 'lucide-react';
+import { Moon, Menu, Activity, Trophy, Target, Coins, Loader2, User, LogOut, ChevronDown, BedDouble, Wallet } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export function Navigation() {
   const location = useLocation();
   const { isAuthenticated, isLoading, login, logout, user } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false);
+
+  const handleConnectWallet = async () => {
+    setIsConnectingWallet(true);
+    try {
+      // TODO: Implement wallet connection logic
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated delay
+      console.log('Wallet connected');
+    } catch (error) {
+      console.error('Failed to connect wallet:', error);
+    } finally {
+      setIsConnectingWallet(false);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
@@ -23,6 +37,10 @@ export function Navigation() {
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-10">
+            <NavLink to="/sleep" active={location.pathname === '/sleep'}>
+              <BedDouble className="w-4 h-4" />
+              <span>Sleep</span>
+            </NavLink>
             <NavLink to="/goals" active={location.pathname === '/goals'}>
               <Target className="w-4 h-4" />
               <span>Goals</span>
@@ -34,10 +52,6 @@ export function Navigation() {
             <NavLink to="/claims" active={location.pathname === '/claims'}>
               <Coins className="w-4 h-4" />
               <span>Claims</span>
-            </NavLink>
-            <NavLink to="/sleep" active={location.pathname === '/sleep'}>
-              <Moon className="w-4 h-4" />
-              <span>Sleep</span>
             </NavLink>
           </div>
           <div className="flex items-center gap-4">
@@ -61,51 +75,71 @@ export function Navigation() {
                 </div>
               </button>
             ) : (
-              <div className="relative">
+              <>
+                {/* Wallet Connection Button */}
                 <button
-                  onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="relative px-4 py-2.5 rounded-xl overflow-hidden group hover:-translate-y-0.5 transition-all duration-300"
+                  onClick={handleConnectWallet}
+                  disabled={isConnectingWallet}
+                  className="relative px-6 py-2.5 rounded-xl overflow-hidden group hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <div className="absolute inset-0 bg-success-50 group-hover:bg-success-100 transition-colors"></div>
-                  <div className="absolute inset-0 rounded-xl ring-1 ring-success-200 group-hover:ring-success-300 transition-colors"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent-50 to-accent-100 group-hover:from-accent-100 group-hover:to-accent-200 transition-colors"></div>
+                  <div className="absolute inset-0 rounded-xl ring-1 ring-accent-200 group-hover:ring-accent-300 transition-colors"></div>
                   <div className="relative flex items-center gap-2">
-                    <Check className="w-4 h-4 text-success-500" />
-                    <span className="text-sm font-medium text-success-600">
-                      Connected
+                    {isConnectingWallet ? (
+                      <Loader2 className="w-4 h-4 animate-spin text-accent-500" />
+                    ) : (
+                      <Wallet className="w-4 h-4 text-accent-500 group-hover:text-accent-600 transition-colors" />
+                    )}
+                    <span className="text-sm font-medium text-accent-600 group-hover:text-accent-700 transition-colors">
+                      Connect Wallet
                     </span>
-                    <ChevronDown className={`w-4 h-4 text-success-500 transition-transform duration-300 ${
-                      showProfileMenu ? 'rotate-180' : ''
-                    }`} />
                   </div>
                 </button>
 
-                {/* Profile Dropdown Menu */}
-                {showProfileMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg ring-1 ring-primary-100 py-1 z-50">
-                    <div className="px-4 py-2 border-b border-primary-100">
-                      <div className="text-sm font-medium text-night-900">{user?.first_name} {user?.last_name}</div>
+                {/* Profile Menu */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    className="relative px-4 py-2.5 rounded-xl overflow-hidden group hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    <div className="absolute inset-0 bg-success-50 group-hover:bg-success-100 transition-colors"></div>
+                    <div className="absolute inset-0 rounded-xl ring-1 ring-success-200 group-hover:ring-success-300 transition-colors"></div>
+                    <div className="relative flex items-center gap-2">
+                      <User className="w-4 h-4 text-success-500" />
+                      <span className="text-sm font-medium text-success-600">
+                        {user?.first_name || 'Profile'}
+                      </span>
+                      <ChevronDown className={`w-4 h-4 text-success-500 transition-transform duration-300 ${
+                        showProfileMenu ? 'rotate-180' : ''
+                      }`} />
                     </div>
-                    <Link
-                      to="/profile"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-night-600 hover:bg-primary-50 transition-colors"
-                      onClick={() => setShowProfileMenu(false)}
-                    >
-                      <User className="w-4 h-4" />
-                      <span>View Profile</span>
-                    </Link>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setShowProfileMenu(false);
-                      }}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Disconnect</span>
-                    </button>
-                  </div>
-                )}
-              </div>
+                  </button>
+
+                  {/* Profile Dropdown Menu */}
+                  {showProfileMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg ring-1 ring-primary-100 py-1 z-50">
+                      <Link
+                        to="/profile"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-night-600 hover:bg-primary-50 transition-colors"
+                        onClick={() => setShowProfileMenu(false)}
+                      >
+                        <User className="w-4 h-4" />
+                        <span>View Profile</span>
+                      </Link>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setShowProfileMenu(false);
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
             <button className="md:hidden">
               <Menu className="w-6 h-6 text-night-600" />
