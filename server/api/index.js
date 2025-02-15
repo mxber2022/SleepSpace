@@ -90,6 +90,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import passport from "./config/passport.js";
 import authRoutes from "./routes/auth.js";
+import { testSupabaseConnection } from "./config/supabase.js";
 
 // Load environment variables
 dotenv.config();
@@ -100,6 +101,17 @@ const isProduction = process.env.NODE_ENV === "production";
 const clientDomain = isProduction
   ? "https://sleepspace.xyz"
   : "http://localhost:5173";
+
+// Test Supabase connection on startup
+testSupabaseConnection()
+  .then((isConnected) => {
+    if (!isConnected) {
+      console.error("⚠️ Starting server without Supabase connection");
+    }
+  })
+  .catch((error) => {
+    console.error("❌ Error testing Supabase connection:", error);
+  });
 
 // Enable better error logging
 app.use((req, res, next) => {
@@ -174,7 +186,7 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-  console.log("Environment:", process.env.NODE_ENV);
-  console.log("Client Domain:", clientDomain);
+  console.log(`🚀 Server running on port ${port}`);
+  console.log("🌍 Environment:", process.env.NODE_ENV);
+  console.log("🔗 Client Domain:", clientDomain);
 });

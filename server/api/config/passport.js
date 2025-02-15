@@ -174,29 +174,12 @@
 // });
 
 // export default passport;
-
 import passport from "passport";
 import { Strategy as OAuth2Strategy } from "passport-oauth2";
-import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
+import { supabase } from "./supabase.js";
 
 dotenv.config();
-
-// Initialize Supabase client with service role key
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error("Missing Supabase configuration");
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-    detectSessionInUrl: false,
-  },
-});
 
 // WHOOP OAuth configuration
 const whoopOAuthConfig = {
@@ -225,15 +208,15 @@ const fetchProfile = async (accessToken, done) => {
 
     if (!profileResponse.ok) {
       const errorText = await profileResponse.text();
-      console.error("WHOOP API Error:", errorText);
+      console.error("❌ WHOOP API Error:", errorText);
       throw new Error(`Failed to fetch profile: ${profileResponse.statusText}`);
     }
 
     const profile = await profileResponse.json();
-    console.log("Fetched WHOOP profile:", profile);
+    console.log("✅ Fetched WHOOP profile:", profile);
     done(null, profile);
   } catch (error) {
-    console.error("Error fetching profile:", error);
+    console.error("❌ Error fetching profile:", error);
     done(error);
   }
 };
@@ -254,17 +237,17 @@ const getUser = async (
     const { data: authData, error: authError } =
       await supabase.auth.signInWithPassword({
         email: `${user_id}@whoop.user`,
-        password: process.env.WHOOP_CLIENT_SECRET, // Use a secure password generation method in production
+        password: process.env.WHOOP_CLIENT_SECRET,
       });
 
     if (authError && authError.status !== 400) {
-      console.error("Supabase auth error:", authError);
+      console.error("❌ Supabase auth error:", authError);
       throw authError;
     }
 
     // If user doesn't exist, create them
     if (authError && authError.status === 400) {
-      console.log("Creating new Supabase user");
+      console.log("📝 Creating new Supabase user");
       const { data: signUpData, error: signUpError } =
         await supabase.auth.signUp({
           email: `${user_id}@whoop.user`,
@@ -279,11 +262,11 @@ const getUser = async (
         });
 
       if (signUpError) {
-        console.error("Error creating Supabase user:", signUpError);
+        console.error("❌ Error creating Supabase user:", signUpError);
         throw signUpError;
       }
 
-      console.log("Created new Supabase user:", signUpData);
+      console.log("✅ Created new Supabase user:", signUpData);
     }
 
     // Get or create user record in users table
@@ -294,7 +277,7 @@ const getUser = async (
       .single();
 
     if (findError && findError.code !== "PGRST116") {
-      console.error("Error finding user:", findError);
+      console.error("❌ Error finding user:", findError);
       throw findError;
     }
 
@@ -315,12 +298,12 @@ const getUser = async (
         .single();
 
       if (error) {
-        console.error("Error updating user:", error);
+        console.error("❌ Error updating user:", error);
         throw error;
       }
 
       userData = data;
-      console.log("Updated existing user:", userData);
+      console.log("✅ Updated existing user:", userData);
     } else {
       const { data, error } = await supabase
         .from("users")
@@ -336,17 +319,17 @@ const getUser = async (
         .single();
 
       if (error) {
-        console.error("Error creating user:", error);
+        console.error("❌ Error creating user:", error);
         throw error;
       }
 
       userData = data;
-      console.log("Created new user:", userData);
+      console.log("✅ Created new user:", userData);
     }
 
     done(null, userData);
   } catch (error) {
-    console.error("Error saving user:", error);
+    console.error("❌ Error saving user:", error);
     done(error);
   }
 };
@@ -361,14 +344,14 @@ passport.use("whoop", whoopAuthorizationStrategy);
 
 // Serialize user for the session
 passport.serializeUser((user, done) => {
-  console.log("Serializing user:", user);
+  console.log("📦 Serializing user:", user);
   done(null, user.id);
 });
 
 // Deserialize user from the session
 passport.deserializeUser(async (id, done) => {
   try {
-    console.log("Deserializing user ID:", id);
+    console.log("📦 Deserializing user ID:", id);
     const { data, error } = await supabase
       .from("users")
       .select()
@@ -376,19 +359,19 @@ passport.deserializeUser(async (id, done) => {
       .single();
 
     if (error) {
-      console.error("Error deserializing user:", error);
+      console.error("❌ Error deserializing user:", error);
       throw error;
     }
 
     if (!data) {
-      console.error("No user found with ID:", id);
+      console.error("❌ No user found with ID:", id);
       return done(null, false);
     }
 
-    console.log("Deserialized user:", data);
+    console.log("✅ Deserialized user:", data);
     done(null, data);
   } catch (error) {
-    console.error("Error deserializing user:", error);
+    console.error("❌ Error deserializing user:", error);
     done(error);
   }
 });
