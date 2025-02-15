@@ -77,7 +77,7 @@ export function SleepGoals() {
                       type="time"
                       value={goals.bedtime}
                       onChange={(e) => setGoals({ ...goals, bedtime: e.target.value })}
-                      className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full px-4 py-2 rounded-xl bg-white text-night-900 outline-none ring-1 ring-primary-100 focus:ring-2 focus:ring-primary-500 transition-all"
                     />
                   </label>
 
@@ -90,7 +90,7 @@ export function SleepGoals() {
                       type="time"
                       value={goals.wakeTime}
                       onChange={(e) => setGoals({ ...goals, wakeTime: e.target.value })}
-                      className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full px-4 py-2 rounded-xl bg-white text-night-900 outline-none ring-1 ring-primary-100 focus:ring-2 focus:ring-primary-500 transition-all"
                     />
                   </label>
                 </div>
@@ -107,7 +107,7 @@ export function SleepGoals() {
                       max="12"
                       value={goals.duration}
                       onChange={(e) => setGoals({ ...goals, duration: Number(e.target.value) })}
-                      className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full px-4 py-2 rounded-xl bg-white text-night-900 outline-none ring-1 ring-primary-100 focus:ring-2 focus:ring-primary-500 transition-all"
                     />
                   </label>
 
@@ -122,7 +122,7 @@ export function SleepGoals() {
                       max="100"
                       value={goals.quality}
                       onChange={(e) => setGoals({ ...goals, quality: Number(e.target.value) })}
-                      className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full px-4 py-2 rounded-xl bg-white text-night-900 outline-none ring-1 ring-primary-100 focus:ring-2 focus:ring-primary-500 transition-all"
                     />
                   </label>
                 </div>
