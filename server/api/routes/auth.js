@@ -80,7 +80,6 @@ router.get("/auth/status", (req, res) => {
     user: req.user,
   });
 
-  // Explicitly set content type
   res.setHeader("Content-Type", "application/json");
   res.json({
     isAuthenticated: req.isAuthenticated(),
