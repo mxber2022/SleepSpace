@@ -6,6 +6,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["lucide-react"],
   },
+   // ... existing code ...
   server: {
     proxy: {
       "/api": {
@@ -13,17 +14,34 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         configure: (proxy, _options) => {
-          proxy.on("error", (err, _req, _res) => {
-            console.error("proxy error", err);
+          proxy.on("error", (err, req, res) => {
+            console.error("Proxy Error:", {
+              message: err.message,
+              url: req.url,
+              statusCode: res?.statusCode
+            });
+            if (!res.headersSent) {
+              res.writeHead(500, { 'Content-Type': 'application/json' });
+            }
+            res.end(JSON.stringify({ error: "Proxy error occurred" }));
           });
           proxy.on("proxyReq", (proxyReq, req, _res) => {
-            console.log("Sending Request:", req.method, req.url);
+            console.log("Sending Request:", {
+              method: req.method,
+              url: req.url,
+              headers: req.headers
+            });
           });
           proxy.on("proxyRes", (proxyRes, req, _res) => {
-            console.log("Received Response:", proxyRes.statusCode, req.url);
+            console.log("Received Response:", {
+              status: proxyRes.statusCode,
+              url: req.url,
+              headers: proxyRes.headers
+            });
           });
         },
       },
     },
   },
+// ... existing code ...
 });
