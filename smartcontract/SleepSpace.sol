@@ -10,7 +10,7 @@ import {Ownable} from "@openzeppelin/contracts@5.2.0/access/Ownable.sol";
 
 contract SleepSpace is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ERC20Permit {
     constructor(address initialOwner, address recipient)
-        ERC20("SleepSpace", "SS")
+        ERC20("SleepSpace", "SLEEP")
         Ownable(initialOwner)
         ERC20Permit("SleepSpace")
     {
