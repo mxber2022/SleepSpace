@@ -145,7 +145,7 @@ export function SleepGoals() {
                 <div className="p-2 bg-primary-50 rounded-xl">
                   <Calendar className="w-6 h-6 text-primary-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-night-900 font-display">Sleep History</h2>
+                <h2 className="text-2xl font-bold text-night-900 font-display">Achievements</h2>
               </div>
               <button className="flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-colors">
                 <span className="text-sm font-medium">View All</span>

@@ -1,20 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Moon, Menu, Activity, Trophy, Target, Coins, Loader2, User, LogOut, ChevronDown, BedDouble, Wallet } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useAppKit } from '@reown/appkit/react';
+import { useAppKitAccount } from '@reown/appkit/react';
+import { useDisconnect } from '@reown/appkit/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navigation() {
   const location = useLocation();
   const { isAuthenticated, isLoading, login, logout, user } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isConnectingWallet, setIsConnectingWallet] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  const { open } = useAppKit();
+  const { address, isConnected, status } = useAppKitAccount();
+  const { disconnect } = useDisconnect();
+
+  // Effect to update connecting state based on status
+  useEffect(() => {
+    setIsConnectingWallet(status === 'connecting');
+  }, [status]);
+
+  const truncateAddress = (addr: string) => {
+    if (!addr) return '';
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  const handleDisconnect = async () => {
+    try {
+      await disconnect();
+      setIsDropdownOpen(false);
+    } catch (error) {
+      console.error('Wallet disconnection failed:', error);
+    }
+  };
+
+  const getButtonText = () => {
+    if (isConnectingWallet) return 'Connecting...';
+    if (isConnected && address) return truncateAddress(address);
+    return 'Connect Wallet';
+  };
 
   const handleConnectWallet = async () => {
+    if (isConnected) {
+      setIsDropdownOpen(true);
+      return;
+    }
+
     setIsConnectingWallet(true);
     try {
-      // TODO: Implement wallet connection logic
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated delay
-      console.log('Wallet connected');
+      await open();
     } catch (error) {
       console.error('Failed to connect wallet:', error);
     } finally {
@@ -27,6 +66,7 @@ export function Navigation() {
       <div className="absolute inset-0 bg-white/80 backdrop-blur-xl border-b border-primary-100/50"></div>
       <div className="container mx-auto px-4 py-4 relative">
         <div className="flex justify-between items-center">
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-radial from-primary-300/40 to-transparent blur-lg group-hover:from-primary-400/50 transition-colors"></div>
@@ -36,6 +76,8 @@ export function Navigation() {
               Sleep<span className="font-light">Space</span>
             </span>
           </Link>
+
+          {/* Navigation Links */}
           <div className="hidden md:flex items-center gap-10">
             <NavLink to="/sleep" active={location.pathname === '/sleep'}>
               <BedDouble className="w-4 h-4" />
@@ -54,6 +96,8 @@ export function Navigation() {
               <span>Claims</span>
             </NavLink>
           </div>
+
+          {/* Right section with auth/wallet */}
           <div className="flex items-center gap-4">
             {!isAuthenticated ? (
               <button
@@ -76,25 +120,62 @@ export function Navigation() {
               </button>
             ) : (
               <>
-                {/* Wallet Connection Button */}
-                <button
-                  onClick={handleConnectWallet}
-                  disabled={isConnectingWallet}
-                  className="relative px-6 py-2.5 rounded-xl overflow-hidden group hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                {/* Wallet Button with Dropdown */}
+                <div 
+                  className="relative" 
+                  ref={dropdownRef}
+                  onMouseEnter={() => isConnected && setIsDropdownOpen(true)}
+                  onMouseLeave={() => setIsDropdownOpen(false)}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-accent-50 to-accent-100 group-hover:from-accent-100 group-hover:to-accent-200 transition-colors"></div>
-                  <div className="absolute inset-0 rounded-xl ring-1 ring-accent-200 group-hover:ring-accent-300 transition-colors"></div>
-                  <div className="relative flex items-center gap-2">
-                    {isConnectingWallet ? (
-                      <Loader2 className="w-4 h-4 animate-spin text-accent-500" />
-                    ) : (
-                      <Wallet className="w-4 h-4 text-accent-500 group-hover:text-accent-600 transition-colors" />
-                    )}
-                    <span className="text-sm font-medium text-accent-600 group-hover:text-accent-700 transition-colors">
-                      Connect Wallet
-                    </span>
-                  </div>
-                </button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleConnectWallet}
+                    disabled={isConnectingWallet}
+                    className="relative px-6 py-2.5 rounded-xl overflow-hidden group hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-r ${
+                      isConnected 
+                        ? 'from-accent-500 via-accent-400 to-accent-600' 
+                        : 'from-accent-400 to-accent-500'
+                    } opacity-90 group-hover:opacity-100 transition-opacity`}></div>
+                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHZpZXdCb3g9IjAgMCA1NiA0OSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjggMEwwIDQ5aDU2TDI4IDB6IiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] bg-[length:20px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="relative flex items-center gap-2">
+                      {isConnectingWallet ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      ) : (
+                        <Wallet className="w-4 h-4 text-white transition-transform group-hover:scale-110" />
+                      )}
+                      <span className="text-sm font-medium text-white">
+                        {getButtonText()}
+                      </span>
+                    </div>
+                    <div className="absolute inset-0 rounded-xl ring-1 ring-white/20 group-hover:ring-white/40 transition-colors"></div>
+                  </motion.button>
+
+                  {/* Dropdown Menu */}
+     
+<AnimatePresence>
+  {isDropdownOpen && isConnected && (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.2 }}
+      className="absolute right-0 mt-2 w-[calc(100%+1px)] bg-white rounded-xl shadow-lg ring-1 ring-primary-100/50 backdrop-blur-xl overflow-hidden"
+    >
+      <button
+        onClick={handleDisconnect}
+        className="w-full px-4 py-2.5 text-left text-night-600 hover:text-night-900 hover:bg-primary-50/50 transition-colors flex items-center gap-2 text-sm"
+      >
+        <LogOut className="w-4 h-4" />
+        <span>Disconnect</span>
+      </button>
+    </motion.div>
+  )}
+</AnimatePresence>
+
+                </div>
 
                 {/* Profile Menu */}
                 <div className="relative">
@@ -115,7 +196,6 @@ export function Navigation() {
                     </div>
                   </button>
 
-                  {/* Profile Dropdown Menu */}
                   {showProfileMenu && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg ring-1 ring-primary-100 py-1 z-50">
                       <Link
