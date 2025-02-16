@@ -12,7 +12,7 @@ import Header from './landingPage/Header';
 import Features from './landingPage/Features';
 import Stats from './landingPage/Stats';
 import Working from './landingPage/Working';
-import Problem from './landingPage/problem';
+import Problem from './landingPage/Problem';
 
 function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
