@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Moon, Menu, Activity, Trophy, Target, Coins, Loader2, User, LogOut, ChevronDown, BedDouble, Wallet } from 'lucide-react';
+import { Moon, Menu, X, Activity, Trophy, Target, Coins, Loader2, User, LogOut, ChevronDown, BedDouble, Wallet } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useAppKit } from '@reown/appkit/react';
 import { useAppKitAccount } from '@reown/appkit/react';
@@ -12,8 +12,8 @@ export function Navigation() {
   const { isAuthenticated, isLoading, login, logout, user } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isConnectingWallet, setIsConnectingWallet] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   const { open } = useAppKit();
@@ -24,6 +24,11 @@ export function Navigation() {
   useEffect(() => {
     setIsConnectingWallet(status === 'connecting');
   }, [status]);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
 
   const truncateAddress = (addr: string) => {
     if (!addr) return '';
@@ -77,7 +82,7 @@ export function Navigation() {
             </span>
           </Link>
 
-          {/* Navigation Links */}
+          {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-10">
             <NavLink to="/sleep" active={location.pathname === '/sleep'}>
               <BedDouble className="w-4 h-4" />
@@ -103,7 +108,7 @@ export function Navigation() {
               <button
                 onClick={login}
                 disabled={isLoading}
-                className="relative px-6 py-2.5 rounded-xl overflow-hidden group hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative px-6 py-2.5 rounded-xl overflow-hidden group hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hidden md:flex"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-primary-50 to-primary-100 group-hover:from-primary-100 group-hover:to-primary-200 transition-colors"></div>
                 <div className="absolute inset-0 rounded-xl ring-1 ring-primary-200 group-hover:ring-primary-300 transition-colors"></div>
@@ -119,7 +124,7 @@ export function Navigation() {
                 </div>
               </button>
             ) : (
-              <>
+              <div className="hidden md:flex items-center gap-4">
                 {/* Wallet Button with Dropdown */}
                 <div 
                   className="relative" 
@@ -154,27 +159,25 @@ export function Navigation() {
                   </motion.button>
 
                   {/* Dropdown Menu */}
-     
-<AnimatePresence>
-  {isDropdownOpen && isConnected && (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.2 }}
-      className="absolute right-0 mt-2 w-[calc(100%+1px)] bg-white rounded-xl shadow-lg ring-1 ring-primary-100/50 backdrop-blur-xl overflow-hidden"
-    >
-      <button
-        onClick={handleDisconnect}
-        className="w-full px-4 py-2.5 text-left text-night-600 hover:text-night-900 hover:bg-primary-50/50 transition-colors flex items-center gap-2 text-sm"
-      >
-        <LogOut className="w-4 h-4" />
-        <span>Disconnect</span>
-      </button>
-    </motion.div>
-  )}
-</AnimatePresence>
-
+                  <AnimatePresence>
+                    {isDropdownOpen && isConnected && (
+                         <motion.div
+                         initial={{ opacity: 0, y: 10 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         exit={{ opacity: 0, y: 10 }}
+                         transition={{ duration: 0.2 }}
+                         className="absolute right-0 mt-2 w-[calc(100%+1px)] bg-white rounded-xl shadow-lg ring-1 ring-primary-100/50 backdrop-blur-xl overflow-hidden"
+                       >
+                        <button
+                          onClick={handleDisconnect}
+                          className="w-full px-4 py-2.5 text-left text-night-600 hover:text-night-900 hover:bg-primary-50/50 transition-colors flex items-center gap-2 text-sm"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Disconnect</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
                 {/* Profile Menu */}
@@ -219,13 +222,111 @@ export function Navigation() {
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             )}
-            <button className="md:hidden">
-              <Menu className="w-6 h-6 text-night-600" />
+
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden relative z-50"
+            >
+              <AnimatePresence mode="wait">
+                {isMobileMenuOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-6 h-6 text-night-600" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: -90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-6 h-6 text-night-600" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t border-primary-100/50 overflow-hidden"
+            >
+              <div className="container mx-auto px-4 py-4">
+                <div className="space-y-4">
+                  <MobileNavLink to="/sleep" active={location.pathname === '/sleep'}>
+                    <BedDouble className="w-5 h-5" />
+                    <span>Sleep</span>
+                  </MobileNavLink>
+                  <MobileNavLink to="/goals" active={location.pathname === '/goals'}>
+                    <Target className="w-5 h-5" />
+                    <span>Goals</span>
+                  </MobileNavLink>
+                  <MobileNavLink to="/competition" active={location.pathname === '/competition'}>
+                    <Trophy className="w-5 h-5" />
+                    <span>Competition</span>
+                  </MobileNavLink>
+                  <MobileNavLink to="/claims" active={location.pathname === '/claims'}>
+                    <Coins className="w-5 h-5" />
+                    <span>Claims</span>
+                  </MobileNavLink>
+
+                  {isAuthenticated ? (
+                    <>
+                      <div className="pt-4 border-t border-primary-100">
+                        <Link
+                          to="/profile"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary-50 transition-colors"
+                        >
+                          <User className="w-5 h-5 text-primary-500" />
+                          <div>
+                            <span className="font-medium text-night-900">{user?.first_name || 'Profile'}</span>
+                            <p className="text-sm text-night-600">View your profile</p>
+                          </div>
+                        </Link>
+                      </div>
+                      <button
+                        onClick={logout}
+                        className="w-full flex items-center gap-2 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors rounded-xl"
+                      >
+                        <LogOut className="w-5 h-5" />
+                        <span>Logout</span>
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      onClick={login}
+                      disabled={isLoading}
+                      className="w-full flex items-center gap-2 px-4 py-3 bg-primary-50 text-primary-600 hover:bg-primary-100 transition-colors rounded-xl"
+                    >
+                      {isLoading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <Activity className="w-5 h-5" />
+                      )}
+                      <span>Connect Device</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );
@@ -243,6 +344,21 @@ function NavLink({ to, active, children }: { to: string; active: boolean; childr
       <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-500 via-primary-400 to-transparent ${
         active ? 'w-full' : 'w-0 group-hover:w-full'
       } transition-all duration-300`}></span>
+    </Link>
+  );
+}
+
+function MobileNavLink({ to, active, children }: { to: string; active: boolean; children: React.ReactNode }) {
+  return (
+    <Link
+      to={to}
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
+        active 
+          ? 'bg-primary-50 text-primary-600' 
+          : 'text-night-600 hover:bg-primary-50 hover:text-primary-600'
+      } transition-colors`}
+    >
+      {children}
     </Link>
   );
 }
