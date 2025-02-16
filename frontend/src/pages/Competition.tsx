@@ -209,7 +209,7 @@ export function Competition() {
                   type="text"
                   value={newCompetition.name}
                   onChange={(e) => setNewCompetition({ ...newCompetition, name: e.target.value })}
-                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
                   placeholder="e.g., March Sleep Challenge"
                 />
               </div>
@@ -222,7 +222,7 @@ export function Competition() {
                     type="date"
                     value={newCompetition.startDate}
                     onChange={(e) => setNewCompetition({ ...newCompetition, startDate: e.target.value })}
-                    className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -233,7 +233,7 @@ export function Competition() {
                     type="date"
                     value={newCompetition.endDate}
                     onChange={(e) => setNewCompetition({ ...newCompetition, endDate: e.target.value })}
-                    className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -247,7 +247,7 @@ export function Competition() {
                   max="100"
                   value={newCompetition.targetScore}
                   onChange={(e) => setNewCompetition({ ...newCompetition, targetScore: Number(e.target.value) })}
-                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
                 />
               </div>
               <div>
@@ -258,7 +258,7 @@ export function Competition() {
                   type="text"
                   value={newCompetition.prize}
                   onChange={(e) => setNewCompetition({ ...newCompetition, prize: e.target.value })}
-                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
                   placeholder="e.g., 1000 SLEEP"
                 />
               </div>
