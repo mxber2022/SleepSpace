@@ -8,11 +8,11 @@ import { Competition } from './pages/Competition';
 import { Claims } from './pages/Claims';
 import { Profile } from './pages/Profile';
 import { Sleep } from './pages/Sleep';
-import Problem from './landingPage/problem';
 import Header from './landingPage/Header';
 import Features from './landingPage/Features';
 import Stats from './landingPage/Stats';
 import Working from './landingPage/Working';
+import Problem from './landingPage/problem';
 
 function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
