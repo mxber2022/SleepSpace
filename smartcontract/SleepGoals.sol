@@ -14,6 +14,7 @@ contract SleepGoals {
         uint256 duration; // In hours
         uint256 quality; // Percentage
         uint256 depositAmount;
+        uint256 goalDuration; // New field for goal duration in hours
         bool achieved;
     }
 
@@ -21,7 +22,7 @@ contract SleepGoals {
     mapping(address => SleepGoal) public userGoals;
 
     // Events
-    event GoalSet(address indexed user, uint256 bedtime, uint256 wakeTime, uint256 duration, uint256 quality, uint256 depositAmount);
+    event GoalSet(address indexed user, uint256 bedtime, uint256 wakeTime, uint256 duration, uint256 quality, uint256 depositAmount, uint256 goalDuration);
     event GoalAchieved(address indexed user, uint256 reward);
     event GoalFailed(address indexed user, uint256 penalty);
 
@@ -36,7 +37,8 @@ contract SleepGoals {
         uint256 _wakeTime,
         uint256 _duration,
         uint256 _quality,
-        uint256 _depositAmount
+        uint256 _depositAmount,
+        uint256 _goalDuration // New parameter for goal duration
     ) external {
         require(_depositAmount > 0, "Deposit must be greater than 0");
         require(_duration >= 4 && _duration <= 12, "Duration must be between 4-12 hours");
@@ -55,10 +57,11 @@ contract SleepGoals {
             duration: _duration,
             quality: _quality,
             depositAmount: _depositAmount,
+            goalDuration: _goalDuration,
             achieved: false
         });
 
-        emit GoalSet(msg.sender, _bedtime, _wakeTime, _duration, _quality, _depositAmount);
+        emit GoalSet(msg.sender, _bedtime, _wakeTime, _duration, _quality, _depositAmount, _goalDuration);
     }
 
     // Function to verify and reward/penalize sleep goals
@@ -99,7 +102,8 @@ contract SleepGoals {
         uint256 duration,
         uint256 quality,
         uint256 depositAmount,
-        bool achieved
+        bool achieved,
+        uint256 goalDuration // Include goalDuration in return values
     ) {
         SleepGoal memory goal = userGoals[_user];
         return (
@@ -108,7 +112,8 @@ contract SleepGoals {
             goal.duration,
             goal.quality,
             goal.depositAmount,
-            goal.achieved
+            goal.achieved,
+            goal.goalDuration
         );
     }
 }
