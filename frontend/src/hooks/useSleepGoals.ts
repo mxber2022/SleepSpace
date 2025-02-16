@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
-import { ethers } from 'ethers';
+import { BrowserProvider, Eip1193Provider, ethers } from 'ethers';
 import { SLEEP_GOALS_ABI, SLEEP_TOKEN_ABI, SLEEP_GOALS_ADDRESS, SLEEP_TOKEN_ADDRESS } from '../contracts/sleepGoals';
-import { useAppKitAccount } from '@reown/appkit/react';
+import { useAppKitAccount, useAppKitProvider } from '@reown/appkit/react';
 
 export interface SleepGoal {
   bedtime: number;
@@ -17,6 +17,7 @@ export function useSleepGoals() {
   const { address, isConnected } = useAppKitAccount();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { walletProvider } = useAppKitProvider('eip155')
 
   const setSleepGoal = useCallback(async (
     bedtime: string,
@@ -34,7 +35,9 @@ export function useSleepGoals() {
     setError(null);
 
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = new BrowserProvider(walletProvider as Eip1193Provider)
+      console.log("provider: ", provider);
+      //const provider = new ethers.BrowserProvider(ethersProvider);
       const signer = await provider.getSigner();
 
       // Convert time strings to Unix timestamps
@@ -79,10 +82,11 @@ export function useSleepGoals() {
     }
 
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = new BrowserProvider(walletProvider as Eip1193Provider)
+      console.log("provider: ", provider);
       const contract = new ethers.Contract(SLEEP_GOALS_ADDRESS, SLEEP_GOALS_ABI, provider);
       const goal = await contract.getUserGoal(address);
-      
+
       return {
         bedtime: Number(goal.bedtime),
         wakeTime: Number(goal.wakeTime),
@@ -112,7 +116,8 @@ export function useSleepGoals() {
     setError(null);
 
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = new BrowserProvider(walletProvider as Eip1193Provider)
+      console.log("provider: ", provider);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(SLEEP_GOALS_ADDRESS, SLEEP_GOALS_ABI, signer);
 

@@ -68,6 +68,7 @@ export function SleepGoals() {
   const fetchCurrentGoal = async () => {
     try {
       const goal = await getUserGoal();
+      console.log("goal: ", goal);
       if (goal) {
         setCurrentGoal({
           ...goal,
