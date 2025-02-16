@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes fadeInAndUp {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes snooze-1 {
+    0%, 100% {
+      opacity: 0;
+    }
+    20%, 40% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes snooze-2 {
+    0%, 100% {
+      opacity: 0;
+    }
+    40%, 60% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes snooze-3 {
+    0%, 100% {
+      opacity: 0;
+    }
+    60%, 80% {
+      opacity: 1;
+    }
+  }
+  
+  .animate-snooze-1 {
+    animation: snooze-1 3s ease-in-out infinite;
+  }
+  
+  .animate-snooze-2 {
+    animation: snooze-2 3s ease-in-out infinite;
+  }
+  
+  .animate-snooze-3 {
+    animation: snooze-3 3s ease-in-out infinite;
+  }
+  
