@@ -6,7 +6,11 @@ import {
   
 export default function Problem() {
     return(
-        <section className="container mx-auto px-4 py-24">
+      <section className="relative border-t border-primary-100">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-300 to-transparent"></div>
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-primary-50/80 to-transparent"></div>
+      
+      <div className="container mx-auto px-4 py-24 relative">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-night-900 mb-6 font-display">
             Sleep Deprivation: A Modern Epidemic
@@ -56,7 +60,8 @@ export default function Problem() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
     )
 }
 
