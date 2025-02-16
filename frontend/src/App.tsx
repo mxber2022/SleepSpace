@@ -13,6 +13,7 @@ import Features from './landingPage/Features';
 import Stats from './landingPage/Stats';
 import Working from './landingPage/Working';
 import Problem from './landingPage/Problem';
+import FinalCTA from './landingPage/FinalCTA';
 
 function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
@@ -63,7 +64,9 @@ function Home() {
       <Problem />
       <Features />
       <Working />
-      <Stats />
+      
+      {/* <Stats /> */}
+      <FinalCTA />
       
     </>
   );

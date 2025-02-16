@@ -52,13 +52,13 @@ export default function Header() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center md:justify-start">
-            <button className="group relative px-8 py-4 overflow-hidden rounded-2xl transform hover:-translate-y-1 transition-all duration-300">
+            <button className="group relative px-7 py-4 overflow-hidden rounded-2xl transform hover:-translate-y-1 transition-all duration-300">
               <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHZpZXdCb3g9IjAgMCA1NiA0OSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjggMEwwIDQ5aDU2TDI4IDB6IiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] bg-[length:20px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative flex items-center justify-center gap-3">
-                <Moon className="w-5 h-5 text-white group-hover:rotate-12 transition-transform" />
-                <span className="text-white font-semibold tracking-wide">Start Earning</span>
-                <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform" />
+                {/* <Moon className="w-5 h-5 text-white group-hover:rotate-12 transition-transform" /> */}
+                <span className="text-white font-semibold tracking-wide">Start Your Journey</span>
+                {/* <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform" /> */}
               </div>
               <div className="absolute inset-0 rounded-2xl ring-1 ring-white/20 group-hover:ring-white/40 transition-colors"></div>
             </button>
@@ -66,7 +66,7 @@ export default function Header() {
             <button className="group relative px-8 py-4 overflow-hidden rounded-2xl bg-white transform hover:-translate-y-1 transition-all duration-300">
               <div className="absolute inset-0 bg-gradient-to-r from-primary-100 to-primary-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <span className="relative text-primary-600 group-hover:text-primary-700 font-semibold tracking-wide flex items-center gap-2">
-                <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                {/* <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" /> */}
                 Learn More
               </span>
               <div className="absolute inset-0 rounded-2xl ring-1 ring-primary-200 group-hover:ring-primary-300 transition-colors"></div>
