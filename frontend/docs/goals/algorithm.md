@@ -11,7 +11,7 @@ The algorithm calculates rewards using the following steps:
 ### **1. Inputs**
 The algorithm takes the following inputs:
 
-#### **Sleep Goals**
+#### **Set your Sleep Goals**
 - `targetBedtime`: The user's target bedtime (e.g., `22:45`).
 - `targetWakeUpTime`: The user's target wake-up time (e.g., `06:45`).
 - `targetDuration`: The user's target sleep duration in hours (e.g., `8`).
