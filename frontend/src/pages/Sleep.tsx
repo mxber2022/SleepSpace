@@ -78,6 +78,10 @@ export function Sleep() {
         });
 
         if (!response.ok) {
+          const data = await response.json();
+          if (data.error === "Token expired") {
+            throw new Error("Your connection has expired. Please reconnect your device.");
+          }
           throw new Error("Failed to fetch sleep data");
         }
 
