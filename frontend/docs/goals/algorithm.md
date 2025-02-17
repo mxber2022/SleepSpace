@@ -18,7 +18,7 @@ The algorithm takes the following inputs:
 - `targetDuration`: The user's target sleep duration in hours (e.g., `8`).
 - `targetQuality`: The user's target sleep quality (e.g., `85%`).
 
-### **2. Points calculation **
+### **2. Points calculation**
 
 #### **Actual Sleep Data (10 points each)**
 - `actualBedtime`: The user's actual bedtime (e.g., `23:00`).
