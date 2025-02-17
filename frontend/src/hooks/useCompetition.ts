@@ -106,9 +106,9 @@ export function useCompetition() {
       const tx = await contract.joinCompetition(competitionId);
       await tx.wait();
       return true;
-    } catch (err) {
-      console.error('Error joining competition:', err);
-      setError(err instanceof Error ? err.message : 'Failed to join competition');
+    } catch (err: any) {
+      console.error('Error joining competition:', err.reason);
+      setError(err.reason);
       return false;
     } finally {
       setIsLoading(false);
