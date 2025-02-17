@@ -1,4 +1,4 @@
-# Sleep Goals Algorithm
+# Sleep Goals Meaning
 
 This is not your regular goal which you set and forget. The Sleep Goals Algorithm is designed to help users improve their sleep habits by setting personalized, achievable goals. It takes into account the user's current sleep patterns, age, and lifestyle to create a tailored plan for better sleep. 
 
