@@ -12,9 +12,17 @@ export default function Problem() {
       
       <div className="container mx-auto px-4 py-24 relative">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-night-900 mb-6 font-display">
-            Sleep Deprivation: A Modern Epidemic
-          </h2>
+          
+        <h2 className="text-3xl md:text-5xl font-extrabold text-night-900 mb-8 font-display animate-fade-in-up tracking-tight">
+  <span className="bg-gradient-to-r from-black to-black bg-clip-text text-transparent">
+    Sleep Deprivation
+  </span>
+  <span className="block mt-3 text-night-800 text-base md:text-lg font-medium tracking-wide opacity-80">
+    A Modern Epidemic
+  </span>
+</h2>
+
+
           <p className="text-night-600 text-lg max-w-2xl mx-auto">
             Millions struggle with poor sleep, leading to reduced productivity, mental health issues, and overall diminished well-being.
           </p>
