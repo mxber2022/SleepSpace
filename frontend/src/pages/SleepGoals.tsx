@@ -409,9 +409,9 @@ export function SleepGoals() {
                               disabled
                               className="w-full px-4 py-2 rounded-xl bg-primary-50 text-night-900 outline-none ring-1 ring-primary-100 cursor-not-allowed"
                             />
-                            <div className="text-sm text-night-600">
-                              (Calculated from bedtime and wake time)
-                            </div>
+                            {/* <div className="text-sm text-night-600">
+                              (Total Bed Time)
+                            </div> */}
                           </div>
                         </label>
 
