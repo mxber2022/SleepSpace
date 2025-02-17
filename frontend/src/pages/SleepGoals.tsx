@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Moon, Clock, Battery, Zap, Calendar, ArrowRight, CheckCircle, XCircle, Coins, Timer, Sparkles, PartyPopper as Party, Lock, Lock as LockOpen, Eye, Target } from 'lucide-react';
+import { 
+  Moon, Clock, Battery, Zap, Calendar, ArrowRight, CheckCircle, XCircle, Coins, Timer, Sparkles, PartyPopper as Party, Lock, Lock as LockOpen, Eye, Target 
+} from 'lucide-react';
 import { useSleepGoals } from '../hooks/useSleepGoals';
 import { useAppKitAccount } from '@reown/appkit/react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -48,6 +50,7 @@ export function SleepGoals() {
     bedtime: '22:00',
     wakeTime: '06:00',
     duration: 8,
+    durationMinutes: 0,
     quality: 85,
     depositAmount: '100',
     goalDuration: 7
@@ -65,10 +68,34 @@ export function SleepGoals() {
     }
   }, [isConnected]);
 
+  useEffect(() => {
+    // Calculate duration whenever bedtime or wake time changes
+    const calculateDuration = () => {
+      const bedTime = new Date(`2000-01-01T${goals.bedtime}`);
+      const wakeTime = new Date(`2000-01-01T${goals.wakeTime}`);
+      
+      // If wake time is earlier than bedtime, add one day to wake time
+      if (wakeTime < bedTime) {
+        wakeTime.setDate(wakeTime.getDate() + 1);
+      }
+      
+      const durationMs = wakeTime.getTime() - bedTime.getTime();
+      const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
+      const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+      
+      setGoals(prev => ({
+        ...prev,
+        duration: durationHours,
+        durationMinutes: durationMinutes
+      }));
+    };
+
+    calculateDuration();
+  }, [goals.bedtime, goals.wakeTime]);
+
   const fetchCurrentGoal = async () => {
     try {
       const goal = await getUserGoal();
-      console.log("goal: ", goal);
       if (goal) {
         setCurrentGoal({
           ...goal,
@@ -102,7 +129,7 @@ export function SleepGoals() {
       const success = await setSleepGoal(
         goals.bedtime,
         goals.wakeTime,
-        goals.duration,
+        goals.duration + (goals.durationMinutes / 60), // Convert to decimal hours
         goals.quality,
         goals.depositAmount,
         goals.goalDuration
@@ -165,7 +192,7 @@ export function SleepGoals() {
                         transition={{ delay: 0.4 }}
                         className="px-4 py-2 bg-primary-50 rounded-lg text-primary-600 font-medium"
                       >
-                        {goals.duration}h Sleep Goal
+                        {goals.duration}h {goals.durationMinutes}m Sleep Goal
                       </motion.div>
                       <motion.div
                         initial={{ y: 10, opacity: 0 }}
@@ -373,16 +400,19 @@ export function SleepGoals() {
                         <label className="block">
                           <div className="flex items-center gap-2 mb-2">
                             <Battery className="w-4 h-4 text-primary-500" />
-                            <span className="text-sm font-medium text-night-700">Sleep Duration (hours)</span>
+                            <span className="text-sm font-medium text-night-700">Sleep Duration</span>
                           </div>
-                          <input
-                            type="number"
-                            min="4"
-                            max="12"
-                            value={goals.duration}
-                            onChange={(e) => setGoals({ ...goals, duration: Number(e.target.value) })}
-                            className="w-full px-4 py-2 rounded-xl bg-white text-night-900 outline-none ring-1 ring-primary-100 focus:ring-2 focus:ring-primary-500 transition-all"
-                          />
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={`${goals.duration}h ${goals.durationMinutes}m`}
+                              disabled
+                              className="w-full px-4 py-2 rounded-xl bg-primary-50 text-night-900 outline-none ring-1 ring-primary-100 cursor-not-allowed"
+                            />
+                            <div className="text-sm text-night-600">
+                              (Calculated from bedtime and wake time)
+                            </div>
+                          </div>
                         </label>
 
                         <label className="block">
