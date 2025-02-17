@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export function Competition() {
   const { isConnected } = useAppKitAccount();
-  const { createCompetition, joinCompetition, getCompetitions, isLoading, error } = useCompetition();
+  const { createCompetition, joinCompetition, getCompetitions, error: competitionError } = useCompetition();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState<number | null>(null);
@@ -22,7 +22,10 @@ export function Competition() {
     targetScore: 85,
     prizePool: '',
   });
-  const [isJoining, setIsJoining] = useState<number | null>(null);
+  const [joiningCompetitions, setJoiningCompetitions] = useState<{ [key: number]: boolean }>({});
+  const [isCreating, setIsCreating] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showError, setShowError] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
@@ -30,9 +33,23 @@ export function Competition() {
     fetchCompetitions();
   }, []);
 
+  useEffect(() => {
+    if (competitionError) {
+      setError(competitionError);
+    }
+  }, [competitionError]);
+
   const fetchCompetitions = async () => {
-    const comps = await getCompetitions();
-    setCompetitions(comps);
+    setIsFetching(true);
+    try {
+      const comps = await getCompetitions();
+      setCompetitions(comps);
+      setError(null);
+    } catch (err) {
+      setError('Failed to fetch competitions');
+    } finally {
+      setIsFetching(false);
+    }
   };
 
   const handleCreateCompetition = async (e: React.FormEvent) => {
@@ -43,6 +60,7 @@ export function Competition() {
       return;
     }
 
+    setIsCreating(true);
     try {
       const success = await createCompetition(
         newCompetition.name,
@@ -67,7 +85,9 @@ export function Competition() {
         });
       }
     } catch (err) {
-      console.error('Error creating competition:', err);
+      setError('Failed to create competition');
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -77,16 +97,17 @@ export function Competition() {
       return;
     }
 
-    setIsJoining(competitionId);
+    setJoiningCompetitions(prev => ({ ...prev, [competitionId]: true }));
     try {
       const success = await joinCompetition(competitionId);
       if (success) {
-        fetchCompetitions();
+        await fetchCompetitions();
+        setError(null);
       }
     } catch (err) {
-      console.error('Error joining competition:', err);
+      setError('Failed to join competition');
     } finally {
-      setIsJoining(null);
+      setJoiningCompetitions(prev => ({ ...prev, [competitionId]: false }));
     }
   };
 
@@ -126,7 +147,7 @@ export function Competition() {
               </div>
             )}
 
-            {isLoading ? (
+            {isFetching ? (
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
               </div>
@@ -180,10 +201,10 @@ export function Competition() {
                       <div className="flex gap-4">
                         <button
                           onClick={() => handleJoinCompetition(competition.id)}
-                          disabled={isJoining === competition.id || !competition.isActive}
+                          disabled={joiningCompetitions[competition.id] || !competition.isActive}
                           className="flex-1 bg-primary-50 py-2 rounded-lg text-primary-600 font-medium hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
                         >
-                          {isJoining === competition.id ? (
+                          {joiningCompetitions[competition.id] ? (
                             <div className="flex items-center justify-center gap-2">
                               <div className="w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
                               <span>Joining...</span>
@@ -231,7 +252,7 @@ export function Competition() {
                         type="text"
                         value={newCompetition.name}
                         onChange={(e) => setNewCompetition({ ...newCompetition, name: e.target.value })}
-                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:border-transparent"
                         placeholder="e.g., March Sleep Challenge"
                       />
                     </div>
@@ -244,7 +265,8 @@ export function Competition() {
                           type="date"
                           value={newCompetition.startDate}
                           onChange={(e) => setNewCompetition({ ...newCompetition, startDate: e.target.value })}
-                          className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:border-transparent"
+
                         />
                       </div>
                       <div>
@@ -255,7 +277,9 @@ export function Competition() {
                           type="date"
                           value={newCompetition.endDate}
                           onChange={(e) => setNewCompetition({ ...newCompetition, endDate: e.target.value })}
-                          className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:border-transparent"
+
+
                         />
                       </div>
                     </div>
@@ -269,7 +293,8 @@ export function Competition() {
                         max="100"
                         value={newCompetition.targetScore}
                         onChange={(e) => setNewCompetition({ ...newCompetition, targetScore: Number(e.target.value) })}
-                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:border-transparent"
+
                       />
                     </div>
                     <div>
@@ -280,7 +305,7 @@ export function Competition() {
                         type="text"
                         value={newCompetition.prizePool}
                         onChange={(e) => setNewCompetition({ ...newCompetition, prizePool: e.target.value })}
-                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:border-transparent"
                         placeholder="e.g., 1000"
                       />
                     </div>
@@ -294,10 +319,10 @@ export function Competition() {
                       </button>
                       <button
                         type="submit"
-                        disabled={isLoading}
+                        disabled={isCreating}
                         className="flex-1 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {isLoading ? (
+                        {isCreating ? (
                           <div className="flex items-center justify-center gap-2">
                             <Loader2 className="w-4 h-4 animate-spin" />
                             <span>Creating...</span>
