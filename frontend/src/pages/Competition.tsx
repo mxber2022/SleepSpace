@@ -1,68 +1,100 @@
-import React, { useState } from 'react';
-import { Trophy, Medal, Crown, Users, ArrowUp, Plus, Calendar, Target, Clock } from 'lucide-react';
-
-interface Competitor {
-  rank: number;
-  name: string;
-  score: number;
-  streak: number;
-  change: 'up' | 'down' | 'same';
-}
-
-interface Competition {
-  id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  participants: number;
-  targetScore: number;
-  prize: string;
-}
-
-const activeCompetitions: Competition[] = [
-  {
-    id: '1',
-    name: 'February Sleep Challenge',
-    startDate: '2025-02-01',
-    endDate: '2025-02-28',
-    participants: 156,
-    targetScore: 85,
-    prize: '1000 SLEEP',
-  },
-  {
-    id: '2',
-    name: 'Weekend Warriors',
-    startDate: '2025-02-15',
-    endDate: '2025-02-17',
-    participants: 89,
-    targetScore: 90,
-    prize: '500 SLEEP',
-  },
-];
-
-const competitors: Competitor[] = [
-  { rank: 1, name: 'Sarah K.', score: 98, streak: 7, change: 'up' },
-  { rank: 2, name: 'Michael R.', score: 95, streak: 5, change: 'same' },
-  { rank: 3, name: 'Emma L.', score: 92, streak: 4, change: 'up' },
-  { rank: 4, name: 'James B.', score: 88, streak: 3, change: 'down' },
-  { rank: 5, name: 'Lisa M.', score: 85, streak: 2, change: 'up' },
-];
+import React, { useState, useEffect } from 'react';
+import { 
+  Trophy, Medal, Crown, Users, ArrowUp, Plus, Calendar, Target, 
+  Clock, Loader2, XCircle, Coins, PartyPopper, Share2, Copy, Check,
+  Twitter, MessageCircle, Send
+} from 'lucide-react';
+import { useCompetition, Competition as CompetitionType } from '../hooks/useCompetition';
+import { useAppKitAccount } from '@reown/appkit/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Competition() {
+  const { isConnected } = useAppKitAccount();
+  const { createCompetition, joinCompetition, getCompetitions, isLoading, error } = useCompetition();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState<number | null>(null);
+  const [competitions, setCompetitions] = useState<CompetitionType[]>([]);
   const [newCompetition, setNewCompetition] = useState({
     name: '',
     startDate: '',
     endDate: '',
     targetScore: 85,
-    prize: '',
+    prizePool: '',
   });
+  const [isJoining, setIsJoining] = useState<number | null>(null);
+  const [showError, setShowError] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
 
-  const handleCreateCompetition = (e: React.FormEvent) => {
+  useEffect(() => {
+    fetchCompetitions();
+  }, []);
+
+  const fetchCompetitions = async () => {
+    const comps = await getCompetitions();
+    setCompetitions(comps);
+  };
+
+  const handleCreateCompetition = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Save competition to Supabase
-    console.log('Competition created:', newCompetition);
-    setShowCreateModal(false);
+    
+    if (!isConnected) {
+      setShowError(true);
+      return;
+    }
+
+    try {
+      const success = await createCompetition(
+        newCompetition.name,
+        new Date(newCompetition.startDate),
+        new Date(newCompetition.endDate),
+        newCompetition.targetScore,
+        newCompetition.prizePool
+      );
+
+      if (success) {
+        setShowCreateModal(false);
+        await fetchCompetitions();
+        setShowSuccessModal(true);
+        
+        // Reset form
+        setNewCompetition({
+          name: '',
+          startDate: '',
+          endDate: '',
+          targetScore: 85,
+          prizePool: '',
+        });
+      }
+    } catch (err) {
+      console.error('Error creating competition:', err);
+    }
+  };
+
+  const handleJoinCompetition = async (competitionId: number) => {
+    if (!isConnected) {
+      setShowError(true);
+      return;
+    }
+
+    setIsJoining(competitionId);
+    try {
+      const success = await joinCompetition(competitionId);
+      if (success) {
+        fetchCompetitions();
+      }
+    } catch (err) {
+      console.error('Error joining competition:', err);
+    } finally {
+      setIsJoining(null);
+    }
+  };
+
+  const handleCopyInviteLink = (competitionId: number) => {
+    const inviteLink = `${window.location.origin}/competition?join=${competitionId}`;
+    navigator.clipboard.writeText(inviteLink);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
   };
 
   return (
@@ -87,200 +119,372 @@ export function Competition() {
               </button>
             </div>
 
-            <div className="grid gap-4">
-              {activeCompetitions.map((competition) => (
-                <div
-                  key={competition.id}
-                  className="group relative bg-white rounded-xl p-6 ring-1 ring-primary-100 hover:ring-primary-300 transition-all duration-300 hover:-translate-y-1"
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 rounded-lg text-red-600 flex items-center gap-2">
+                <XCircle className="w-5 h-5" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+              </div>
+            ) : competitions.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-primary-50 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Trophy className="w-8 h-8 text-primary-600" />
+                </div>
+                <h3 className="text-xl font-bold text-night-900 mb-2">No Active Competitions</h3>
+                <p className="text-night-600 mb-6">Create your first competition and invite friends to join!</p>
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 rounded-lg text-primary-600 hover:bg-primary-100 transition-colors"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-                  <div className="relative">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-bold text-night-900">{competition.name}</h3>
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-primary-500" />
-                        <span className="text-sm text-night-600">{competition.participants} joined</span>
+                  <Plus className="w-4 h-4" />
+                  <span>Create Competition</span>
+                </button>
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                {competitions.map((competition) => (
+                  <div
+                    key={competition.id}
+                    className="group relative bg-white rounded-xl p-6 ring-1 ring-primary-100 hover:ring-primary-300 transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+                    <div className="relative">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-bold text-night-900">{competition.name}</h3>
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm text-night-600">{competition.participants.length} joined</span>
+                        </div>
+                      </div>
+                      <div className="grid md:grid-cols-3 gap-4 mb-4">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm text-night-600">
+                            {competition.startDate.toLocaleDateString()} - {competition.endDate.toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Target className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm text-night-600">Target Score: {competition.targetScore}+</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Coins className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm text-night-600">Prize: {competition.prizePool} SLEEP</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-4">
+                        <button
+                          onClick={() => handleJoinCompetition(competition.id)}
+                          disabled={isJoining === competition.id || !competition.isActive}
+                          className="flex-1 bg-primary-50 py-2 rounded-lg text-primary-600 font-medium hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+                        >
+                          {isJoining === competition.id ? (
+                            <div className="flex items-center justify-center gap-2">
+                              <div className="w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+                              <span>Joining...</span>
+                            </div>
+                          ) : (
+                            <span>{competition.isActive ? 'Join Competition' : 'Competition Ended'}</span>
+                          )}
+                        </button>
+                        <button
+                          onClick={() => setShowInviteModal(competition.id)}
+                          className="px-4 py-2 bg-primary-50 rounded-lg text-primary-600 hover:bg-primary-100 transition-colors"
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
-                    <div className="grid md:grid-cols-3 gap-4 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-primary-500" />
-                        <span className="text-sm text-night-600">
-                          {new Date(competition.startDate).toLocaleDateString()} - {new Date(competition.endDate).toLocaleDateString()}
-                        </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Create Competition Modal */}
+          <AnimatePresence>
+            {showCreateModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-night-950/50 backdrop-blur-sm flex items-center justify-center z-50"
+              >
+                <motion.div
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.9, y: 20 }}
+                  className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full mx-4"
+                >
+                  <h2 className="text-2xl font-bold text-night-900 mb-6 font-display">Create Competition</h2>
+                  <form onSubmit={handleCreateCompetition} className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-night-700 mb-2">
+                        Competition Name
+                      </label>
+                      <input
+                        type="text"
+                        value={newCompetition.name}
+                        onChange={(e) => setNewCompetition({ ...newCompetition, name: e.target.value })}
+                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="e.g., March Sleep Challenge"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-night-700 mb-2">
+                          Start Date
+                        </label>
+                        <input
+                          type="date"
+                          value={newCompetition.startDate}
+                          onChange={(e) => setNewCompetition({ ...newCompetition, startDate: e.target.value })}
+                          className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Target className="w-4 h-4 text-primary-500" />
-                        <span className="text-sm text-night-600">Target Score: {competition.targetScore}+</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Trophy className="w-4 h-4 text-primary-500" />
-                        <span className="text-sm text-night-600">Prize: {competition.prize}</span>
+                      <div>
+                        <label className="block text-sm font-medium text-night-700 mb-2">
+                          End Date
+                        </label>
+                        <input
+                          type="date"
+                          value={newCompetition.endDate}
+                          onChange={(e) => setNewCompetition({ ...newCompetition, endDate: e.target.value })}
+                          className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
                       </div>
                     </div>
-                    <button className="w-full bg-primary-50 py-2 rounded-lg text-primary-600 font-medium hover:bg-primary-100 transition-colors">
-                      Join Competition
+                    <div>
+                      <label className="block text-sm font-medium text-night-700 mb-2">
+                        Target Sleep Score
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={newCompetition.targetScore}
+                        onChange={(e) => setNewCompetition({ ...newCompetition, targetScore: Number(e.target.value) })}
+                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-night-700 mb-2">
+                        Prize Pool (SLEEP)
+                      </label>
+                      <input
+                        type="text"
+                        value={newCompetition.prizePool}
+                        onChange={(e) => setNewCompetition({ ...newCompetition, prizePool: e.target.value })}
+                        className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="e.g., 1000"
+                      />
+                    </div>
+                    <div className="flex gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setShowCreateModal(false)}
+                        className="flex-1 px-4 py-2 rounded-xl border border-primary-100 text-night-600 hover:bg-primary-50 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="flex-1 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isLoading ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>Creating...</span>
+                          </div>
+                        ) : (
+                          'Create Competition'
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Success Modal */}
+          <AnimatePresence>
+            {showSuccessModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-night-950/50 backdrop-blur-sm flex items-center justify-center z-50"
+              >
+                <motion.div
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.9, y: 20 }}
+                  className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full mx-4 text-center"
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="w-16 h-16 bg-primary-50 rounded-full mx-auto mb-6 flex items-center justify-center"
+                  >
+                    <PartyPopper className="w-8 h-8 text-primary-600" />
+                  </motion.div>
+                  <h2 className="text-2xl font-bold text-night-900 mb-4">Competition Created! 🎉</h2>
+                  <p className="text-night-600 mb-8">
+                    Your competition has been created successfully. Share it with your friends to start the challenge!
+                  </p>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => setShowSuccessModal(false)}
+                      className="flex-1 px-4 py-2 rounded-xl border border-primary-100 text-night-600 hover:bg-primary-50 transition-colors"
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowSuccessModal(false);
+                        setShowInviteModal(competitions[competitions.length - 1].id);
+                      }}
+                      className="flex-1 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:opacity-90 transition-opacity"
+                    >
+                      Invite Friends
                     </button>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {/* Leaderboard */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg ring-1 ring-primary-100">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary-50 rounded-xl">
-                  <Medal className="w-6 h-6 text-primary-600" />
-                </div>
-                <h2 className="text-2xl font-bold text-night-900 font-display">Current Leaderboard</h2>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              {competitors.map((competitor) => (
-                <div
-                  key={competitor.rank}
-                  className="group relative bg-white rounded-xl p-6 ring-1 ring-primary-100 hover:ring-primary-300 transition-all duration-300 hover:-translate-y-1"
+          {/* Invite Modal */}
+          <AnimatePresence>
+            {showInviteModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-night-950/50 backdrop-blur-sm flex items-center justify-center z-50"
+              >
+                <motion.div
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.9, y: 20 }}
+                  className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full mx-4"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-                  <div className="relative flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          competitor.rank <= 3 ? 'bg-primary-100' : 'bg-night-100'
-                        }`}>
-                          {competitor.rank <= 3 ? (
-                            <Crown className={`w-4 h-4 ${
-                              competitor.rank === 1 ? 'text-primary-600' : 'text-primary-500'
-                            }`} />
+                  <h2 className="text-2xl font-bold text-night-900 mb-6">Invite Friends</h2>
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-night-700 mb-2">
+                        Share Link
+                      </label>
+                      <div className="flex gap-2">
+                        <div className="flex-1 px-4 py-2 bg-primary-50 rounded-xl text-night-600 font-mono text-sm truncate">
+                          {`${window.location.origin}/competition?join=${showInviteModal}`}
+                        </div>
+                        <button
+                          onClick={() => handleCopyInviteLink(showInviteModal)}
+                          className="px-4 py-2 bg-primary-50 rounded-xl text-primary-600 hover:bg-primary-100 transition-colors"
+                        >
+                          {copiedLink ? (
+                            <Check className="w-4 h-4" />
                           ) : (
-                            <span className="text-sm font-medium text-night-600">
-                              {competitor.rank}
-                            </span>
+                            <Copy className="w-4 h-4" />
                           )}
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-night-900">{competitor.name}</h3>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Medal className="w-4 h-4 text-primary-400" />
-                            <span className="text-sm text-night-600">
-                              {competitor.streak} day streak
-                            </span>
-                          </div>
-                        </div>
+                        </button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-night-900">{competitor.score}</div>
-                        <div className="text-sm text-night-600">Sleep Score</div>
+
+                    <div className="space-y-4">
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-primary-100"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                          <span className="px-2 bg-white text-night-600">or share via</span>
+                        </div>
                       </div>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        competitor.change === 'up' ? 'bg-green-100' : 
-                        competitor.change === 'down' ? 'bg-red-100' : 'bg-night-100'
-                      }`}>
-                        <ArrowUp className={`w-4 h-4 ${
-                          competitor.change === 'up' ? 'text-green-600' :
-                          competitor.change === 'down' ? 'text-red-600 rotate-180' : 'text-night-400'
-                        } transition-transform`} />
+
+                      <div className="flex justify-center gap-4">
+                        <SocialShareButton
+                          platform="Twitter"
+                          url={`${window.location.origin}/competition?join=${showInviteModal}`}
+                          text="Join my sleep competition on Sleep2Earn! 😴💪"
+                        />
+                        <SocialShareButton
+                          platform="Telegram"
+                          url={`${window.location.origin}/competition?join=${showInviteModal}`}
+                          text="Join my sleep competition on Sleep2Earn! 😴💪"
+                        />
+                        <SocialShareButton
+                          platform="WhatsApp"
+                          url={`${window.location.origin}/competition?join=${showInviteModal}`}
+                          text="Join my sleep competition on Sleep2Earn! 😴💪"
+                        />
                       </div>
                     </div>
+
+                    <button
+                      onClick={() => setShowInviteModal(null)}
+                      className="w-full px-4 py-2 rounded-xl border border-primary-100 text-night-600 hover:bg-primary-50 transition-colors"
+                    >
+                      Close
+                    </button>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
-
-      {/* Create Competition Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-night-950/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold text-night-900 mb-6 font-display">Create Competition</h2>
-            <form onSubmit={handleCreateCompetition} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-night-700 mb-2">
-                  Competition Name
-                </label>
-                <input
-                  type="text"
-                  value={newCompetition.name}
-                  onChange={(e) => setNewCompetition({ ...newCompetition, name: e.target.value })}
-                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
-                  placeholder="e.g., March Sleep Challenge"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-night-700 mb-2">
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    value={newCompetition.startDate}
-                    onChange={(e) => setNewCompetition({ ...newCompetition, startDate: e.target.value })}
-                    className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-night-700 mb-2">
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    value={newCompetition.endDate}
-                    onChange={(e) => setNewCompetition({ ...newCompetition, endDate: e.target.value })}
-                    className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-night-700 mb-2">
-                  Target Sleep Score
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={newCompetition.targetScore}
-                  onChange={(e) => setNewCompetition({ ...newCompetition, targetScore: Number(e.target.value) })}
-                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-night-700 mb-2">
-                  Prize Pool
-                </label>
-                <input
-                  type="text"
-                  value={newCompetition.prize}
-                  onChange={(e) => setNewCompetition({ ...newCompetition, prize: e.target.value })}
-                  className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:border-red-500 focus:outline-none"
-                  placeholder="e.g., 1000 SLEEP"
-                />
-              </div>
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-2 rounded-xl border border-primary-100 text-night-600 hover:bg-primary-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:opacity-90 transition-opacity"
-                >
-                  Create Competition
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
+  );
+}
+
+function SocialShareButton({ platform, url, text }: { platform: string; url: string; text: string }) {
+  const getShareUrl = () => {
+    const encodedUrl = encodeURIComponent(url);
+    const encodedText = encodeURIComponent(text);
+
+    switch (platform) {
+      case 'Twitter':
+        return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
+      case 'Telegram':
+        return `https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`;
+      case 'WhatsApp':
+        return `https://wa.me/?text=${encodedText}%20${encodedUrl}`;
+      default:
+        return '#';
+    }
+  };
+
+  const getIcon = () => {
+    switch (platform) {
+      case 'Twitter':
+        return <Twitter className="w-5 h-5" />;
+      case 'Telegram':
+        return <Send className="w-5 h-5" />;
+      case 'WhatsApp':
+        return <MessageCircle className="w-5 h-5" />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <a
+      href={getShareUrl()}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="p-3 bg-primary-50 rounded-xl text-primary-600 hover:bg-primary-100 transition-colors flex items-center justify-center"
+      title={`Share on ${platform}`}
+    >
+      {getIcon()}
+    </a>
   );
 }

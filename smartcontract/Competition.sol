@@ -117,6 +117,16 @@ contract Competition is Ownable(address(msg.sender))  {
         emit RewardDistributed(_competitionId, participants[0], (totalPrize * 50) / 100);
     }
 
+    function getAllCompetitions() external view returns (CompetitionDetails[] memory) {
+    CompetitionDetails[] memory allCompetitions = new CompetitionDetails[](competitionCounter);
+    
+    for (uint256 i = 1; i <= competitionCounter; i++) {
+        allCompetitions[i - 1] = competitions[i];
+    }
+    
+    return allCompetitions;
+}
+
     // Withdraw remaining tokens (only owner)
     function withdrawTokens(uint256 _amount) external onlyOwner {
         rewardToken.transfer(owner(), _amount);
