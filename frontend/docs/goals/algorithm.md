@@ -12,10 +12,13 @@ The algorithm calculates rewards using the following steps:
 The algorithm takes the following inputs:
 
 #### **Set your Sleep Goals**
+The algorithm takes the following inputs:
 - `targetBedtime`: The user's target bedtime (e.g., `22:45`).
 - `targetWakeUpTime`: The user's target wake-up time (e.g., `06:45`).
 - `targetDuration`: The user's target sleep duration in hours (e.g., `8`).
 - `targetQuality`: The user's target sleep quality (e.g., `85%`).
+
+### **2. Points calculation **
 
 #### **Actual Sleep Data (10 points each)**
 - `actualBedtime`: The user's actual bedtime (e.g., `23:00`).
@@ -28,11 +31,11 @@ The algorithm takes the following inputs:
 
 ---
 
-### **2. Calculate Total Point**
+### **3. Calculate Total Point**
 For each sleep metric, the algorithm calculates how closely the user adhered to their goal:
 
 totalPoints = bedtimeScore + wakeUpScore + durationScore + qualityScore;
 
-### **3. Calculate Total Token earned**
+### **4. Calculate Total Token earned**
 
 tokensTokensEarned = totalPoints
