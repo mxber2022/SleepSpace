@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Moon, Clock, Battery, Zap, Calendar, ArrowRight, CheckCircle, XCircle, Coins, Timer, Sparkles, PartyPopper as Party, Lock, Lock as LockOpen, Eye, Target 
+  Moon, Clock, Battery, Zap, Calendar, ArrowRight, CheckCircle, XCircle, 
+  Coins, Timer, Sparkles, PartyPopper as Party, Lock, Lock as LockOpen, 
+  Eye, Target, Shield, AlertTriangle, HelpCircle 
 } from 'lucide-react';
 import { useSleepGoals } from '../hooks/useSleepGoals';
 import { useAppKitAccount } from '@reown/appkit/react';
@@ -43,6 +45,36 @@ const sleepHistory: SleepHistory[] = [
   },
 ];
 
+type GoalMode = 'secure' | 'challenge';
+
+interface GoalModeOption {
+  id: GoalMode;
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  riskLevel: string;
+  potential: string;
+}
+
+const goalModes: GoalModeOption[] = [
+  {
+    id: 'secure',
+    name: 'Secure Mode',
+    description: 'Stake is locked until maturity date while earning rewards. No risk of losing your stake.',
+    icon: <Shield className="w-6 h-6" />,
+    riskLevel: 'No Risk',
+    potential: '1x-2x Returns'
+  },
+  {
+    id: 'challenge',
+    name: 'Challenge Mode',
+    description: 'Higher rewards but risk losing a portion of your stake if goals are not met.',
+    icon: <Target className="w-6 h-6" />,
+    riskLevel: 'Medium Risk',
+    potential: '2x-5x Returns'
+  }
+];
+
 export function SleepGoals() {
   const { isConnected } = useAppKitAccount();
   const { setSleepGoal, getUserGoal, isLoading, error } = useSleepGoals();
@@ -53,7 +85,8 @@ export function SleepGoals() {
     durationMinutes: 0,
     quality: 85,
     depositAmount: '100',
-    goalDuration: 7
+    goalDuration: 7,
+    mode: 'secure' as GoalMode
   });
   const [currentGoal, setCurrentGoal] = useState<any>(null);
   const [showError, setShowError] = useState(false);
@@ -61,6 +94,7 @@ export function SleepGoals() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [showSetGoals, setShowSetGoals] = useState(false);
+  const [showModeTooltip, setShowModeTooltip] = useState(false);
 
   useEffect(() => {
     if (isConnected) {
@@ -132,7 +166,8 @@ export function SleepGoals() {
         goals.duration + (goals.durationMinutes / 60), // Convert to decimal hours
         goals.quality,
         goals.depositAmount,
-        goals.goalDuration
+        goals.goalDuration,
+        goals.mode
       );
 
       if (success) {
@@ -149,6 +184,10 @@ export function SleepGoals() {
       console.error('Error setting sleep goal:', err);
       setCurrentStep(1);
     }
+  };
+
+  const getGoalModeInfo = (mode: GoalMode) => {
+    return goalModes.find(m => m.id === mode)!;
   };
 
   return (
@@ -352,6 +391,108 @@ export function SleepGoals() {
                   )}
 
                   <form onSubmit={handleSubmit} className="space-y-8">
+                    {/* Goal Mode Toggle */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 text-sm font-medium text-night-700">
+                          Goal Mode
+                          <div 
+                            className="relative"
+                            onMouseEnter={() => setShowModeTooltip(true)}
+                            onMouseLeave={() => setShowModeTooltip(false)}
+                          >
+                            <HelpCircle className="w-4 h-4 text-night-400 cursor-help" />
+                            
+                            {/* Tooltip */}
+                            <AnimatePresence>
+                              {showModeTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, y: 5 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: 5 }}
+                                  className="absolute left-1/2 bottom-full mb-2 w-80 -translate-x-1/2 p-4 bg-white rounded-xl shadow-lg ring-1 ring-primary-100 z-50"
+                                >
+                                  <div className="space-y-4">
+                                    {goalModes.map(mode => (
+                                      <div key={mode.id} className="flex items-start gap-3">
+                                        <div className="p-2 bg-primary-50 rounded-lg shrink-0">
+                                          {mode.icon}
+                                        </div>
+                                        <div>
+                                          <h4 className="font-medium text-night-900 mb-1">{mode.name}</h4>
+                                          <p className="text-sm text-night-600">{mode.description}</p>
+                                          <div className="flex items-center gap-4 mt-2 text-xs">
+                                            <span className="text-night-600">Risk: {mode.riskLevel}</span>
+                                            <span className="text-night-600">Returns: {mode.potential}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="absolute left-1/2 -bottom-2 w-4 h-4 bg-white transform rotate-45 -translate-x-1/2 ring-1 ring-primary-100 ring-r-0 ring-b-0"></div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        </label>
+                        
+                        {/* Toggle Switch */}
+                        <button
+  type="button"
+  onClick={() => setGoals(prev => ({
+    ...prev,
+    mode: prev.mode === 'secure' ? 'challenge' : 'secure'
+  }))}
+  className="relative inline-flex items-center h-6 w-14 rounded-full transition-colors duration-300 focus:outline-none"
+  style={{
+    backgroundColor: goals.mode === 'secure' ? '#CBD5E0' : '#FB7185',
+  }}
+>
+  <span className="sr-only">Toggle goal mode</span>
+  <span
+    className={`absolute left-1 h-4 w-4 rounded-full bg-white shadow transform transition-transform duration-300 ease-in-out ${
+      goals.mode === 'secure' ? 'translate-x-0' : 'translate-x-8'
+    }`}
+  />
+  <span
+    className={`absolute inset-0 flex items-center justify-between px-2 text-xs font-medium transition-colors duration-300 ${
+      goals.mode === 'secure' ? 'text-gray-700' : 'text-white'
+    }`}
+  >
+    <span>{goals.mode === 'secure' ? 'Safe' : 'Risk'}</span>
+  </span>
+</button>
+
+
+
+
+
+                      </div>
+
+                      {/* Mode Info Banner */}
+                      <div className={`p-4 rounded-xl ${
+                        goals.mode === 'secure' 
+                          ? 'bg-primary-50/50 text-primary-700' 
+                          : 'bg-red-50/50 text-red-700'
+                      }`}>
+                        <div className="flex items-start gap-3">
+                          {goals.mode === 'secure' ? (
+                            <Shield className="w-5 h-5 shrink-0 mt-0.5" />
+                          ) : (
+                            <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+                          )}
+                          <div>
+                            <p className="font-medium mb-1">
+                              {getGoalModeInfo(goals.mode).name}
+                            </p>
+                            <p className="text-sm opacity-90">
+                              {getGoalModeInfo(goals.mode).description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-4">
                         <label className="block">
@@ -409,9 +550,6 @@ export function SleepGoals() {
                               disabled
                               className="w-full px-4 py-2 rounded-xl bg-primary-50 text-night-900 outline-none ring-1 ring-primary-100 cursor-not-allowed"
                             />
-                            {/* <div className="text-sm text-night-600">
-                              (Total Bed Time)
-                            </div> */}
                           </div>
                         </label>
 
@@ -517,6 +655,7 @@ export function SleepGoals() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div className="text-sm font-medium text-night-600">
+                 ```tsx
                           {new Date(history.date).toLocaleDateString('en-US', {
                             weekday: 'long',
                             month: 'short',
@@ -524,7 +663,14 @@ export function SleepGoals() {
                           })}
                         </div>
                         {history.achieved ? (
-                          <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded-lg">
+                          <div className="flex items-center gap-1 te
+                        )
+                        }
+              )
+              )
+              }
+  )
+}xt-green-600 bg-green-50 px-2 py-1 rounded-lg">
                             <CheckCircle className="w-4 h-4" />
                             <span className="text-xs font-medium">Goal Achieved</span>
                           </div>
