@@ -11,12 +11,14 @@ export interface SleepGoal {
   depositAmount: bigint;
   achieved: boolean;
   goalDuration: number;
+  mode: string;
 }
 
 export function useSleepGoals() {
   const { address, isConnected } = useAppKitAccount();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [approvingStatus, setApprovingStatus] = useState(false);
   const { walletProvider } = useAppKitProvider('eip155')
 
   const setSleepGoal = useCallback(async (
@@ -25,7 +27,8 @@ export function useSleepGoals() {
     duration: number,
     quality: number,
     depositAmount: string,
-    goalDuration: number
+    goalDuration: number,
+    mode: string
   ) => {
     if (!isConnected || !address) {
       throw new Error('Wallet not connected');
@@ -33,13 +36,14 @@ export function useSleepGoals() {
 
     setIsLoading(true);
     setError(null);
+    setApprovingStatus(false);
 
     try {
       const provider = new BrowserProvider(walletProvider as Eip1193Provider)
       console.log("provider: ", provider);
       //const provider = new ethers.BrowserProvider(ethersProvider);
       const signer = await provider.getSigner();
-
+      console.log("mode is", typeof(mode));
       // Convert time strings to Unix timestamps
       const bedtimeDate = new Date(`1970-01-01T${bedtime}`);
       const wakeTimeDate = new Date(`1970-01-01T${wakeTime}`);
@@ -53,7 +57,7 @@ export function useSleepGoals() {
       const tokenContract = new ethers.Contract(SLEEP_TOKEN_ADDRESS, SLEEP_TOKEN_ABI, signer);
       const approveTx = await tokenContract.approve(SLEEP_GOALS_ADDRESS, depositAmountWei);
       await approveTx.wait();
-
+      setApprovingStatus(true); // approved successfully
       // Set sleep goal
       const contract = new ethers.Contract(SLEEP_GOALS_ADDRESS, SLEEP_GOALS_ABI, signer);
       const tx = await contract.setSleepGoal(
@@ -62,14 +66,16 @@ export function useSleepGoals() {
         duration,
         quality,
         depositAmountWei,
-        goalDuration
+        goalDuration,
+        mode
       );
       await tx.wait();
 
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error setting sleep goal:', err);
-      setError(err instanceof Error ? err.message : 'Failed to set sleep goal');
+      setApprovingStatus(false); 
+      setError(err.reason);
       return false;
     } finally {
       setIsLoading(false);
@@ -94,7 +100,8 @@ export function useSleepGoals() {
         quality: Number(goal.quality),
         depositAmount: goal.depositAmount,
         achieved: goal.achieved,
-        goalDuration: Number(goal.goalDuration)
+        goalDuration: Number(goal.goalDuration),
+        mode: goal.mode
       };
     } catch (err) {
       console.error('Error getting user goal:', err);
@@ -144,6 +151,7 @@ export function useSleepGoals() {
     getUserGoal,
     verifySleepGoal,
     isLoading,
-    error
+    error,
+    approvingStatus
   };
 }

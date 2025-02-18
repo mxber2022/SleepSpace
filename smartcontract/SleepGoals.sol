@@ -16,13 +16,14 @@ contract SleepGoals {
         uint256 depositAmount;
         uint256 goalDuration; // New field for goal duration in hours
         bool achieved;
+        string mode; // Mode of the goal ("secure" or "challenge")
     }
 
     // Mapping of user addresses to their goals
     mapping(address => SleepGoal) public userGoals;
 
     // Events
-    event GoalSet(address indexed user, uint256 bedtime, uint256 wakeTime, uint256 duration, uint256 quality, uint256 depositAmount, uint256 goalDuration);
+    event GoalSet(address indexed user, uint256 bedtime, uint256 wakeTime, uint256 duration, uint256 quality, uint256 depositAmount, uint256 goalDuration, string mode);
     event GoalAchieved(address indexed user, uint256 reward);
     event GoalFailed(address indexed user, uint256 penalty);
 
@@ -38,11 +39,13 @@ contract SleepGoals {
         uint256 _duration,
         uint256 _quality,
         uint256 _depositAmount,
-        uint256 _goalDuration // New parameter for goal duration
+        uint256 _goalDuration, // New parameter for goal duration
+        string memory _mode // New parameter for goal mode
     ) external {
         require(_depositAmount > 0, "Deposit must be greater than 0");
         require(_duration >= 4 && _duration <= 12, "Duration must be between 4-12 hours");
         require(_quality >= 0 && _quality <= 100, "Quality must be between 0-100%");
+        require(keccak256(bytes(_mode)) == keccak256("secure") || keccak256(bytes(_mode)) == keccak256("challenge"), "Invalid mode");
 
         // Transfer tokens from user to contract
         require(
@@ -58,10 +61,11 @@ contract SleepGoals {
             quality: _quality,
             depositAmount: _depositAmount,
             goalDuration: _goalDuration,
-            achieved: false
+            achieved: false,
+            mode: _mode
         });
 
-        emit GoalSet(msg.sender, _bedtime, _wakeTime, _duration, _quality, _depositAmount, _goalDuration);
+        emit GoalSet(msg.sender, _bedtime, _wakeTime, _duration, _quality, _depositAmount, _goalDuration, _mode);
     }
 
     // Function to verify and reward/penalize sleep goals
@@ -103,7 +107,8 @@ contract SleepGoals {
         uint256 quality,
         uint256 depositAmount,
         bool achieved,
-        uint256 goalDuration // Include goalDuration in return values
+        uint256 goalDuration, // Include goalDuration in return values
+        string memory mode // Include mode in return values
     ) {
         SleepGoal memory goal = userGoals[_user];
         return (
@@ -113,7 +118,8 @@ contract SleepGoals {
             goal.quality,
             goal.depositAmount,
             goal.achieved,
-            goal.goalDuration
+            goal.goalDuration,
+            goal.mode
         );
     }
 }

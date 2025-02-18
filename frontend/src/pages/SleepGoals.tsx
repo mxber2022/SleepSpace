@@ -77,7 +77,7 @@ const goalModes: GoalModeOption[] = [
 
 export function SleepGoals() {
   const { isConnected } = useAppKitAccount();
-  const { setSleepGoal, getUserGoal, isLoading, error } = useSleepGoals();
+  const { setSleepGoal, getUserGoal, isLoading, error, approvingStatus } = useSleepGoals();
   const [goals, setGoals] = useState({
     bedtime: '22:00',
     wakeTime: '06:00',
@@ -95,6 +95,23 @@ export function SleepGoals() {
   const [isApproving, setIsApproving] = useState(false);
   const [showSetGoals, setShowSetGoals] = useState(false);
   const [showModeTooltip, setShowModeTooltip] = useState(false);
+
+
+  const fetchCurrentGoal = async () => {
+    try {
+      const goal = await getUserGoal();
+      if (goal) {
+        setCurrentGoal({
+          ...goal,
+          bedtime: new Date(goal.bedtime * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+          wakeTime: new Date(goal.wakeTime * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+          depositAmount: ethers.formatEther(goal.depositAmount)
+        });
+      }
+    } catch (err) {
+      console.error('Error fetching current goal:', err);
+    }
+  };
 
   useEffect(() => {
     if (isConnected) {
@@ -127,21 +144,15 @@ export function SleepGoals() {
     calculateDuration();
   }, [goals.bedtime, goals.wakeTime]);
 
-  const fetchCurrentGoal = async () => {
-    try {
-      const goal = await getUserGoal();
-      if (goal) {
-        setCurrentGoal({
-          ...goal,
-          bedtime: new Date(goal.bedtime * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-          wakeTime: new Date(goal.wakeTime * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-          depositAmount: ethers.formatEther(goal.depositAmount)
-        });
-      }
-    } catch (err) {
-      console.error('Error fetching current goal:', err);
-    }
-  };
+ useEffect(()=>{
+  console.log("something changed: ", approvingStatus);
+
+  if(approvingStatus){
+    setIsApproving(false);
+    setCurrentStep(3);
+  }
+ 
+ },[approvingStatus])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,19 +167,21 @@ export function SleepGoals() {
       setCurrentStep(2);
       
       // Simulate approval delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setIsApproving(false);
-      setCurrentStep(3);
-
+      // await new Promise(resolve => setTimeout(resolve, 2000));
+      // setIsApproving(false);
+      // setCurrentStep(3);
+      console.log(goals.mode);
+      console.log("approvingStatus: ", approvingStatus);
       const success = await setSleepGoal(
         goals.bedtime,
         goals.wakeTime,
-        goals.duration + (goals.durationMinutes / 60), // Convert to decimal hours
+        goals.duration,
         goals.quality,
         goals.depositAmount,
         goals.goalDuration,
-        goals.mode
+        String(goals.mode)
       );
+      
 
       if (success) {
         setShowSuccess(true);
@@ -186,6 +199,8 @@ export function SleepGoals() {
     }
   };
 
+
+  
   const getGoalModeInfo = (mode: GoalMode) => {
     return goalModes.find(m => m.id === mode)!;
   };
