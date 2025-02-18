@@ -1,6 +1,28 @@
-import { Clock, Target, Coins, Sparkles, Eye } from "lucide-react"; // Replace with your actual icon imports
+import { Clock, Target, Coins, Sparkles, Eye, Calendar } from "lucide-react"; // Replace with your actual icon imports
 
 const CurrentGoal = ({ currentGoal, setShowSetGoals }: any) => {
+
+  const getDateDisplay = (days: number) => {
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + days);
+
+    return {
+      start: startDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }),
+      end: endDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      })
+    };
+  };
+
+  const dates = currentGoal ? getDateDisplay(currentGoal.goalDuration) : null;
+  
   return currentGoal ? (
     <div className="bg-white rounded-2xl p-8 shadow-lg ring-1 ring-primary-100">
       <div className="flex items-center justify-between mb-8">
@@ -75,11 +97,24 @@ const CurrentGoal = ({ currentGoal, setShowSetGoals }: any) => {
       </div>
 
       <div className="mt-6 p-4 bg-primary-50 rounded-xl">
-        <div className="flex items-center gap-2 text-primary-600">
-          <Sparkles className="w-4 h-4" />
-          <span className="text-sm font-medium">
-            Mode: {currentGoal.mode}
-          </span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-primary-600">
+            <Sparkles className="w-4 h-4" />
+            <span className="text-sm font-medium">
+              Mode: {currentGoal.mode}
+            </span>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-primary-600">
+            <div className="flex items-center gap-1">
+              <Calendar className="w-4 h-4" />
+              <span>{dates?.start}</span>
+            </div>
+            <span>→</span>
+            <div className="flex items-center gap-1">
+              <Calendar className="w-4 h-4" />
+              <span>{dates?.end}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
