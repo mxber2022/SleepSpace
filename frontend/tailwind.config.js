@@ -4,15 +4,18 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', 'sans-serif'],
-        display: ['Cal Sans', 'Inter var', 'sans-serif'],
+        sans: ['DM Sans', 'sans-serif'],
+        display: ['DM Sans', 'sans-serif'], 
       },
       fontSize: {
-        'display-2xl': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-        'display-xl': ['3.75rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-        'body-lg': ['1.125rem', { lineHeight: '1.75' }],
-        'body-base': ['1rem', { lineHeight: '1.75' }],
-        'body-sm': ['0.875rem', { lineHeight: '1.625' }],
+        'display-2xl': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }], // Large screens
+        'display-xl': ['3.75rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }], // Medium screens
+        'display-lg': ['3rem', { lineHeight: '1.2', letterSpacing: '-0.02em' }], // Small/medium screens
+        'display-md': ['2.25rem', { lineHeight: '1.2', letterSpacing: '-0.02em' }], // Small screens
+        'body-lg': ['1.125rem', { lineHeight: '1.75' }], // Large screens
+        'body-base': ['1rem', { lineHeight: '1.75' }], // Medium screens
+        'body-sm': ['0.875rem', { lineHeight: '1.625' }], // Small screens
+        'body-xs': ['0.75rem', { lineHeight: '1.5' }], // Extra small screens
       },
       colors: {
         primary: {
@@ -55,7 +58,7 @@ export default {
           950: '#052e16',
         },
         night: {
-          lightGray:'#FFFFFF4D',
+          lightGray: '#FFFFFF4D',
           50: '#f8fafc',
           100: '#f1f5f9',
           200: '#e2e8f0',
@@ -102,7 +105,7 @@ export default {
         },
       },
       backgroundImage: {
-        'gradient-linear': 'linear-gradient(63.18deg, #000000 0%, #252745 48.5%, #434CCD 100%)',
+        'gradient-linear': 'linear-gradient(white, gray)', // Fixed the gradient syntax
       },
     },
   },
