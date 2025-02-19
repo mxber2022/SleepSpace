@@ -50,16 +50,10 @@ Our system rewards healthy sleep habits by granting NFT-based boosts. Dream Weav
 ## How It Works
 
 1. **Mint or Earn NFTs:**
-   - **Mint:** Get the **Dream Weaver (Common)** NFT instantly and enjoy a 5% boost.
+   - **Mint:** Get the **Dream Weaver (Common)** NFT instantly and enjoy a 3% boost.
    - **Earn:** Achieve your sleep goals to unlock the higher-tier NFTs.
 2. **Track Your Sleep:**
    Use our integrated sleep tracking system to record your sleep metrics. Monitor your progress and aim for better sleep quality!
 3. **Receive Boosts:**
    Based on the NFT you hold and your sleep performance, receive tailored boosts that increase your nightly sleep-to-earn rewards.
 
-## Getting Started
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/your-username/sleep-to-earn-nft.git
-   cd sleep-to-earn-nft
