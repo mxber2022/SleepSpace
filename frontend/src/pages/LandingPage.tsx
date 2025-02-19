@@ -123,10 +123,7 @@ export default function LandingPage() {
           {/* Mindful & Restorative */}
           <div className="bg-[#F6FF95] p-6 rounded-3xl flex flex-col h-[210px] w-full max-w-[317px] mx-auto">
             <div className="mb-4 ml-4">
-              <img src="/RestIcon.png" alt="Restorative Icon" className="w-11 h-11" onError={(e) => {
-                console.error('RestIcon failed to load:', e);
-                e.currentTarget.src = 'https://via.placeholder.com/44';
-              }} />
+              <img src="/RestIcon.png" alt="Restorative Icon" className="w-11 h-11" />
             </div>
             <div className="flex flex-col items-center justify-start flex-grow mt-4">
               <h3 
@@ -225,10 +222,7 @@ export default function LandingPage() {
           {/* Web3 + Well-being */}
           <div className="bg-[#F6FF95] p-6 rounded-3xl flex flex-col h-[210px] w-full max-w-[317px] mx-auto">
             <div className="mb-4 ml-4">
-              <img src="/MoonSmall.png" alt="Moon Icon" className="w-11 h-11" onError={(e) => {
-                console.error('MoonSmall failed to load:', e);
-                e.currentTarget.src = 'https://via.placeholder.com/44';
-              }} />
+              <img src="/MoonSmall.png" alt="Moon Icon" className="w-11 h-11" />
             </div>
             <div className="flex flex-col items-center justify-start flex-grow mt-4">
               <h3 

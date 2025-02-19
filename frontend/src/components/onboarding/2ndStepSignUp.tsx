@@ -7,7 +7,7 @@ interface SignUpStepProps {
 
 export function SignUpStep({ onNext, onPrevious }: SignUpStepProps) {
   return (
-    <div className="w-[519px] h-[610px]">
+    <div className="w-[470px] h-[570px]"> 
       <div className="w-full h-full bg-[#FFFFFF4D] rounded-[22px] p-8 backdrop-blur-md border border-night-800 relative overflow-hidden font-dm-sans">
         {/* Sign Up Title */}
         <div className="w-full text-center mt-[10px] text-white font-bold text-[24px] leading-[36.46px] tracking-[0%] text-shadow-[0px_4px_4px_#00000040]">

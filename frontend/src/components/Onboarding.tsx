@@ -61,10 +61,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
           <div className="w-full h-full relative ">
             {/* Sleepspace Logo centered above FirstStep */}
             <div className="flex justify-center mb-4">
-              <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2" onError={(e) => {
-                console.error('Image failed to load:', e);
-                e.currentTarget.src = 'https://via.placeholder.com/32';
-              }} />
+              <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2"  />
               <span className="text-white text-lg font-bold">Sleepspace</span>
             </div>
             {steps[step].component}

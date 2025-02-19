@@ -7,7 +7,7 @@ interface InformationalStepProps {
 
 export function InformationalStep({ onNext, onPrevious }: InformationalStepProps) {
   return (
-    <div className="w-[519px] h-[610px] flex items-center justify-center">
+    <div className="w-[470px] h-[570px]"> 
       <div className="w-full h-full bg-[#FFFFFF4D] rounded-[22px] p-8 backdrop-blur-md border border-night-800 relative overflow-hidden font-dm-sans">
         {/* Main Title */}
         <div className="w-full text-center mt-[20px] text-white font-bold text-[24px] leading-[24px] tracking-[0%] text-shadow-[0px_4px_4px_#00000040]">

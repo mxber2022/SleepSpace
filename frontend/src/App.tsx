@@ -9,11 +9,11 @@ import { Claims } from './pages/Claims';
 import { Profile } from './pages/Profile';
 import { Sleep } from './pages/Sleep';
 import LandingPage from './pages/LandingPage';
-import Features from './landingPage/Features';
-import Stats from './landingPage/Stats';
-import Working from './landingPage/Working';
-import Problem from './landingPage/Problem';
-import FinalCTA from './landingPage/FinalCTA';
+import Features from './landingPageOld/Features';
+import Stats from './landingPageOld/Stats';
+import Working from './landingPageOld/Working';
+import Problem from './landingPageOld/Problem';
+import FinalCTA from './landingPageOld/FinalCTA';
 function App() {
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
   const navigate = useNavigate();
