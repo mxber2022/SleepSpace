@@ -61,8 +61,8 @@ export default function LandingPage() {
         )}
       </header>
 
-      {/* Features Section */}
-      <section className="w-full h-auto text-white py-16 flex flex-col md:flex-row items-center justify-center px-4 md:px-8 lg:px-16 max-w-7xl mx-auto border-b border-white">
+      {/* Features Section (About) */}
+      <section id="about" className="w-full h-auto text-white py-16 flex flex-col md:flex-row items-center justify-center px-4 md:px-8 lg:px-16 max-w-7xl mx-auto border-b border-white">
         <div className="flex flex-col items-start max-w-lg space-y-4 mb-8 md:mb-0">
           <h1 
             className="text-4xl font-bold mb-6 text-left" 
@@ -100,7 +100,7 @@ export default function LandingPage() {
             }}
             onClick={() => navigate('/onboarding')} 
           >
-            Get Early Access
+            Sign In
           </button>
         </div>
         <div className="mt-4 md:mt-0 md:ml-8">
@@ -109,7 +109,7 @@ export default function LandingPage() {
       </section>
 
       {/* Values Section */}
-      <section className="w-full h-auto bg-[#1C1C1C] py-16 text-white border-t border-b border-white">
+      <section id="values" className="w-full h-auto bg-[#1C1C1C] py-16 text-white border-t border-b border-white">
         <h2 className="text-5xl font-bold text-center mb-12" style={{ 
           fontFamily: 'DM Sans', 
           fontWeight: 700, 
@@ -255,7 +255,7 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="w-full h-auto bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] py-16 text-white flex flex-col items-center justify-center border-t border-b border-white">
+      <section id="how-it-works" className="w-full h-auto bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] py-16 text-white flex flex-col items-center justify-center border-t border-b border-white">
         <h2 
           className="text-5xl font-bold text-center mb-16" 
           style={{ 
@@ -372,8 +372,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Start Your Journey Now Section */}
-      <section className="w-full h-auto bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] py-16 text-white text-center border-t border-b border-white">
+      {/* Start Your Journey Now Section (Contact) */}
+      <section id="contact" className="w-full h-auto bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] py-16 text-white text-center border-t border-b border-white">
         <h2 
           className="text-5xl font-bold mt-37 mb-16" 
           style={{ 
@@ -400,20 +400,6 @@ export default function LandingPage() {
             onClick={() => navigate('/onboarding')} 
           >
             Sign In
-          </button>
-          <button 
-            className="bg-white text-[#000000] font-bold hover:bg-gray-200" 
-            style={{ 
-              width: '222px', 
-              height: '68px', 
-              borderRadius: '15px', 
-              padding: '23px 44px', 
-              gap: '10px', 
-              borderWidth: '1px' 
-            }}
-            onClick={() => navigate('/onboarding')} 
-          >
-            Get Early Access
           </button>
         </div>
       </section>
