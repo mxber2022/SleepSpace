@@ -55,6 +55,7 @@ export default {
           950: '#052e16',
         },
         night: {
+          lightGray:'#FFFFFF4D',
           50: '#f8fafc',
           100: '#f1f5f9',
           200: '#e2e8f0',
@@ -101,8 +102,7 @@ export default {
         },
       },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(var(--tw-gradient-stops))',
+        'gradient-linear': 'linear-gradient(63.18deg, #000000 0%, #252745 48.5%, #434CCD 100%)',
       },
     },
   },

@@ -142,7 +142,7 @@ export function SleepGoals() {
                   animate={{ y: 0 }}
                   className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-conic from-primary-300/30 via-primary-200/20 to-transparent blur-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-linear from-primary-300/30 via-primary-200/20 to-transparent blur-2xl"></div>
                   <div className="relative text-center">
                     <motion.div
                       initial={{ scale: 0 }}

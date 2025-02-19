@@ -104,8 +104,8 @@ export function Sleep() {
             <div className="bg-white rounded-2xl p-8 md:p-12 shadow-lg ring-1 ring-primary-100 relative overflow-hidden">
               {/* Background Decorations */}
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-conic from-primary-200/30 via-primary-300/20 to-transparent rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-8 -left-8 w-[200px] h-[200px] bg-gradient-conic from-primary-300/20 via-primary-200/20 to-transparent rounded-full blur-3xl"></div>
+                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-linear from-primary-200/30 via-primary-300/20 to-transparent rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-8 -left-8 w-[200px] h-[200px] bg-gradient-linear from-primary-300/20 via-primary-200/20 to-transparent rounded-full blur-3xl"></div>
               </div>
 
               <div className="relative">

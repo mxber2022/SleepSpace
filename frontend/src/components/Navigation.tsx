@@ -74,7 +74,7 @@ export function Navigation() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-radial from-primary-300/40 to-transparent blur-lg group-hover:from-primary-400/50 transition-colors"></div>
+              <div className="absolute inset-0 bg-gradient-linear from-primary-300/40 to-transparent blur-lg group-hover:from-primary-400/50 transition-colors"></div>
               <Moon className="w-6 h-6 text-primary-600 relative group-hover:scale-110 transform transition-transform" />
             </div>
             <span className="text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 font-display tracking-wider">

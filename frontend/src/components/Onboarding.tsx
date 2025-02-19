@@ -1,95 +1,186 @@
 import React, { useState } from 'react';
-import { Moon, Sun, CloudMoon, Bed, Coffee, AArrowDown as ZZZ, Brain, PartyPopper as Party } from 'lucide-react';
+import { FirstStep } from './onboarding/1stStepWelcome.tsx'; 
+import { SignUpStep } from './onboarding/2ndStepSignUp.tsx'; 
+import { ConnectWalletStep } from './onboarding/3rdStepConnectWallet.tsx'; 
+import { InformationalStep } from './onboarding/4thStepInformational.tsx'; 
+import { ConnectDeviceStep } from './onboarding/5thStepConnectDevice.tsx'; 
+import { CompletionStep } from './onboarding/6thStepCompletion.tsx'; 
+
+interface Step {
+  component: React.ReactElement;
+  title?: string;
+  description?: string; 
+}
 
 export function Onboarding({ onComplete }: { onComplete: () => void }) {
   const [step, setStep] = useState(0);
-  const [name, setName] = useState(() => {
-    // Try to get name from localStorage
-    return localStorage.getItem('userName') || '';
-  });
 
-  const steps = [
+  const steps: Step[] = [
+    // First step (informational welcome window)
     {
-      icon: <Moon className="w-12 h-12 text-primary-400 animate-spin-slow" />,
-      title: "Hey there, Night Owl! 🌙",
-      description: "Ready to turn those Z's into cryptocurrency?",
-      input: (
-        <input
-          type="text"
-          placeholder="What should we call you?"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="mt-4 w-full px-4 py-2 bg-night-900/50 border border-night-800 rounded-lg text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-        />
-      )
+      component: <FirstStep onNext={() => setStep(step + 1)} />,
+      title: "Welcome to Sleepspace",
+      description: "Get started with a better sleep experience."
     },
+    // Second step (Sign Up)
     {
-      icon: <Coffee className="w-12 h-12 text-primary-400 animate-bounce" />,
-      title: `${name}, are you tired of...being tired? 😴`,
-      description: "Don't worry, we won't make you do jumping jacks at midnight."
+      component: <SignUpStep onNext={() => setStep(step + 1)} onPrevious={() => setStep(step - 1)} />,
+      title: "Sign Up",
+      description: "Create your account to begin your journey."
     },
+    // Third step (Connect Wallet)
     {
-      icon: <Brain className="w-12 h-12 text-primary-400 animate-pulse" />,
-      title: "Fun Fact Time! 🎯",
-      description: "Did you know? Giraffes only need 2 hours of sleep! But don't worry, we won't hold you to those standards."
+      component: <ConnectWalletStep onNext={() => setStep(step + 1)} onPrevious={() => setStep(step - 1)} />,
+      title: "Connect Wallet",
+      description: "Link your wallet for secure access."
     },
+    // Fourth step (Informational)
     {
-      icon: <Party className="w-12 h-12 text-primary-400 animate-wiggle" />,
-      title: "You're Ready to Sleep Like a Pro! 🌟",
-      description: "Remember: The early bird gets the worm, but the night owl gets the cryptocurrency!"
+      component: <InformationalStep onNext={() => setStep(step + 1)} onPrevious={() => setStep(step - 1)} />,
+      title: "Learn More",
+      description: "Discover how Sleepspace improves your sleep."
+    },
+    // Fifth step (Connect Device)
+    {
+      component: <ConnectDeviceStep onNext={() => setStep(step + 1)} onPrevious={() => setStep(step - 1)} />,
+      title: "Connect Device",
+      description: "Pair your device for personalized insights."
+    },
+    // Sixth step (Completion)
+    {
+      component: <CompletionStep onComplete={onComplete} />,
+      title: "You’re all set to Sleep & Earn!",
+      description: "Track your sleep effortlessly. Earn tokens while you recharge. Wake up refreshed & ready to go."
     }
   ];
 
-  const handleNext = () => {
-    if (step === 0) {
-      if (!name) return;
-      // Save name to localStorage
-      localStorage.setItem('userName', name);
-    }
-    
-    if (step === steps.length - 1) {
-      onComplete();
-    } else {
-      setStep(step + 1);
-    }
-  };
-
   return (
-    <div className="fixed inset-0 bg-night-950/90 backdrop-blur-lg z-50 flex items-center justify-center">
-      <div className="max-w-md w-full p-8">
-        <div className="bg-night-900/50 rounded-2xl p-8 backdrop-blur-md border border-night-800 relative overflow-hidden">
-          {/* Floating elements animation */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <ZZZ className="absolute top-8 right-8 w-6 h-6 text-primary-400/20 animate-float" />
-            <CloudMoon className="absolute bottom-8 left-8 w-8 h-8 text-primary-400/20 animate-float-delayed" />
-            <Sun className="absolute top-1/2 right-4 w-4 h-4 text-primary-400/20 animate-float" />
-            <Bed className="absolute bottom-4 right-1/2 w-6 h-6 text-primary-400/20 animate-float-delayed" />
-          </div>
-
-          <div className="relative">
-            <div className="flex justify-center mb-6">{steps[step].icon}</div>
-            <h3 className="text-2xl font-bold text-white text-center mb-4 font-display">
-              {steps[step].title}
-            </h3>
-            <p className="text-night-200 text-center mb-6">
-              {steps[step].description}
-            </p>
-            {'input' in steps[step] && steps[step].input}
-            <div className="flex justify-center mt-8">
-              <button
-                onClick={handleNext}
-                className="group relative px-8 py-3 overflow-hidden rounded-xl"
-                disabled={step === 0 && !name}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
-                <span className="relative text-white font-medium">
-                  {step === steps.length - 1 ? "Let's Start!" : "Next"}
-                </span>
-              </button>
+    <div className="fixed inset-0 bg-gradient-to-r from-[#000000] via-[#252745] to-[#434CCD] z-50 flex items-center justify-center">
+      {step === 0 ? (
+        <div className="w-[519px] h-[610px]"> 
+          <div className="w-full h-full relative ">
+            {/* Sleepspace Logo centered above FirstStep */}
+            <div className="flex justify-center mb-4">
+              <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2" onError={(e) => {
+                console.error('Image failed to load:', e);
+                e.currentTarget.src = 'https://via.placeholder.com/32';
+              }} />
+              <span className="text-white text-lg font-bold">Sleepspace</span>
             </div>
+            {steps[step].component}
           </div>
         </div>
-      </div>
+      ) : step === 1 ? (
+        <div className="w-[519px] h-[610px]"> 
+          <div className="w-full h-full relative ">
+            {/* Sleepspace Logo centered above SignUpStep */}
+            <div className="flex justify-center mb-4">
+              <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2" />
+              <span className="text-white text-lg font-bold">Sleepspace</span>
+            </div>
+            {/* Progress Bar (centered, 180px width, specific dimensions) */}
+            <div className="flex justify-center mt-10 mb-6">
+              <div className="h-[10px] w-[180px] bg-gray-200 rounded-[100px]">
+                <div
+                  className="h-[10px] bg-[#434CCD] rounded-[100px] transition-all duration-300"
+                  style={{ width: `${getProgressWidth(step)}%` }} 
+                ></div>
+              </div>
+            </div>
+            {steps[step].component}
+          </div>
+        </div>
+      ) : step === 2 ? (
+        <div className="w-[519px] h-[610px]"> 
+          <div className="w-full h-full relative ">
+            {/* Sleepspace Logo centered above ConnectWalletStep */}
+            <div className="flex justify-center mb-4">
+             <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2" />
+              <span className="text-white text-lg font-bold">Sleepspace</span>
+            </div>
+            {/* Progress Bar (centered, 180px width, specific dimensions) */}
+            <div className="flex justify-center mt-10 mb-6">
+              <div className="h-[10px] w-[180px] bg-gray-200 rounded-[100px]">
+                <div
+                  className="h-[10px] bg-[#434CCD] rounded-[100px] transition-all duration-300"
+                  style={{ width: `${getProgressWidth(step)}%` }} 
+                ></div>
+              </div>
+            </div>
+            {steps[step].component}
+          </div>
+        </div>
+      ) : step === 3 ? (
+        <div className="w-[519px] h-[610px]"> 
+          <div className="w-full h-full relative ">
+            {/* Sleepspace Logo centered above InformationalStep */}
+            <div className="flex justify-center mb-4">
+            <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2" />
+              <span className="text-white text-lg font-bold">Sleepspace</span>
+            </div>
+            {/* Progress Bar (centered, 180px width, specific dimensions) */}
+            <div className="flex justify-center mt-10 mb-6">
+              <div className="h-[10px] w-[180px] bg-gray-200 rounded-[100px]">
+                <div
+                  className="h-[10px] bg-[#434CCD] rounded-[100px] transition-all duration-300"
+                  style={{ width: `${getProgressWidth(step)}%` }} 
+                ></div>
+              </div>
+            </div>
+            {steps[step].component}
+          </div>
+        </div>
+      ) : step === 4 ? (
+        <div className="w-[519px] h-[610px]"> 
+          <div className="w-full h-full relative ">
+            {/* Sleepspace Logo centered above ConnectDeviceStep */}
+            <div className="flex justify-center mb-4">
+            <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2" />
+              <span className="text-white text-lg font-bold">Sleepspace</span>
+            </div>
+            {/* Progress Bar (centered, 180px width, specific dimensions) */}
+            <div className="flex justify-center mt-10 mb-6">
+              <div className="h-[10px] w-[180px] bg-gray-200 rounded-[100px]">
+                <div
+                  className="h-[10px] bg-[#434CCD] rounded-[100px] transition-all duration-300"
+                  style={{ width: `${getProgressWidth(step)}%` }} 
+                ></div>
+              </div>
+            </div>
+            {steps[step].component}
+          </div>
+        </div>
+      ) : step === 5 ? (
+        <div className="w-[519px] h-[610px]"> 
+          <div className="w-full h-full relative ">
+            {/* Sleepspace Logo centered above CompletionStep */}
+            <div className="flex justify-center mb-4">
+            <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2" />
+              <span className="text-white text-lg font-bold">Sleepspace</span>
+            </div>
+            {/* Progress Bar (100% for completion) */}
+            <div className="flex justify-center mt-10 mb-6">
+              <div className="h-[10px] w-[180px] bg-gray-200 rounded-[100px]">
+                <div
+                  className="h-[10px] bg-[#434CCD] rounded-[100px] transition-all duration-300"
+                  style={{ width: '100%' }}
+                ></div>
+              </div>
+            </div>
+            {steps[step].component}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
+}
+
+// Helper function to safely get progress width, handling potential undefined values
+function getProgressWidth(step: number): number {
+  if (step === 0) return 16.67; 
+  if (step >= 1 && step < 5) {
+    const progress = (step + 1) / 6; 
+    return progress * 100;
+  }
+  return 100; 
 }
