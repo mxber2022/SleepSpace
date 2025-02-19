@@ -8,6 +8,7 @@ import { Competition } from './pages/Competition';
 import { Claims } from './pages/Claims';
 import { Profile } from './pages/Profile';
 import { Sleep } from './pages/Sleep';
+import { NFTs } from './pages/NFTs';
 import Header from './landingPage/Header';
 import Features from './landingPage/Features';
 import Stats from './landingPage/Stats';
@@ -50,6 +51,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/sleep" element={<Sleep />} />
         <Route path="/" element={<Home />} />
+        <Route path="/nfts" element={<NFTs />} />
       </Routes>
       
       <Footer />
