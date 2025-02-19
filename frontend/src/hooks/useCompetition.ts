@@ -23,6 +23,7 @@ export interface Competition {
   prizePool: string;
   participants: string[];
   isActive: boolean;
+  creator: string;
 }
 
 export interface Competitor {
@@ -128,7 +129,8 @@ export function useCompetition() {
         targetScore: Number(comp.targetScore),
         prizePool: ethers.formatEther(comp.prizePool),
         participants: comp.participants,
-        isActive: comp.isActive
+        isActive: comp.isActive,
+         creator: "0x0cCEb44dbbAF7dE58D8D0e12c93cbE553f0d6Ebf"
       }));
     } catch (err) {
       console.error('Error fetching competitions:', err);
