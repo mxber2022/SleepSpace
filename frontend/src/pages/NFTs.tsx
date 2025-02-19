@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppKitAccount } from '@reown/appkit/react';
+import { useNFT } from '../hooks/useNFT';
 
 interface NFTCard {
   name: string;
@@ -147,24 +148,37 @@ export function NFTs() {
   const [mintingComplete, setMintingComplete] = useState(false);
   const [userLevel, setUserLevel] = useState(1);
   const [userProgress, setUserProgress] = useState(35);
+  const { isLoading, error, mintDreamWeaver } = useNFT();
 
   const handleMint = async () => {
     if (!isConnected) return;
-    
+
     setShowMintModal(true);
     setIsMinting(true);
     setMintingStage(0);
 
-    // Simulate minting stages
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setMintingStage(1);
-    
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setMintingStage(2);
-    
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsMinting(false);
-    setMintingComplete(true);
+    try {
+      // Call mintDreamWeaver from useNFT hook
+      const success = await mintDreamWeaver();
+
+      if (success) {
+        setMintingStage(1);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setMintingStage(2);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setIsMinting(false);
+        setMintingComplete(true);
+      } else {
+        // Handle minting failure
+        // Optionally, you can set error state from useNFT hook
+        console.error('Failed to mint NFT');
+        // Handle error state
+      }
+    } catch (error) {
+      // Handle any other errors
+      console.error('Error minting NFT:', error);
+      // Handle error state
+    }
   };
 
   const MintingModal = () => (
