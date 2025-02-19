@@ -1,76 +1,69 @@
-import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-// Define the type for the ref parameter
-type RefType = React.RefObject<HTMLElement>;
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 export default function LandingPage() {
   const navigate = useNavigate();
-
-  // Create refs for each section we want to scroll to
-  const aboutRef = useRef<HTMLElement>(null);
-  const valuesRef = useRef<HTMLElement>(null);
-  const howItWorksRef = useRef<HTMLElement>(null);
-  const contactRef = useRef<HTMLElement>(null);
-
-  // Function to handle smooth scrolling to a section, with explicit typing
-  const scrollToSection = (ref: RefType) => {
-    if (ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for hamburger menu
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] text-white font-dm-sans">
       {/* Header */}
-      <header className="w-full bg-gradient-to-b from-[#1A1A3D] to-[#2A2A5A] text-white p-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2" onError={(e) => {
-            console.error('Logo failed to load:', e);
-            e.currentTarget.src = 'https://via.placeholder.com/32';
-          }} />
-          <span className="text-lg font-bold">Sleepspace</span>
+      <header className="w-full bg-gradient-to-b from-[#1A1A3D] to-[#2A2A5A] text-white p-4">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <img src="/Logo.png" alt="Sleepspace Logo" className="w-8 h-8 mr-2"  />
+            <span className="text-lg font-bold">Sleepspace</span>
+          </div>
+
+          {/* Hamburger Menu Button for Mobile */}
+          <button 
+            className="md:hidden p-2 focus:outline-none"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+          </button>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex space-x-6">
+            <a href="#about" className="hover:text-gray-300">About</a>
+            <a href="#values" className="hover:text-gray-300">Values</a>
+            <a href="#how-it-works" className="hover:text-gray-300">How It Works?</a>
+            <a href="#contact" className="hover:text-gray-300">Contact</a>
+          </nav>
+
+          {/* Sign In Button (Desktop) */}
+          <button 
+            className="hidden md:block bg-[#4A6ACD] text-white px-4 py-2 rounded-full hover:bg-[#5A7ACD]"
+            onClick={() => navigate('/onboarding')}
+          >
+            Sign In
+          </button>
         </div>
-        <nav className="space-x-6">
-          <span 
-            className="hover:text-gray-300 cursor-pointer" 
-            onClick={() => scrollToSection(aboutRef)}
-          >
-            About
-          </span>
-          <span 
-            className="hover:text-gray-300 cursor-pointer" 
-            onClick={() => scrollToSection(valuesRef)}
-          >
-            Values
-          </span>
-          <span 
-            className="hover:text-gray-300 cursor-pointer" 
-            onClick={() => scrollToSection(howItWorksRef)}
-          >
-            How It Works?
-          </span>
-          <span 
-            className="hover:text-gray-300 cursor-pointer" 
-            onClick={() => scrollToSection(contactRef)}
-          >
-            Contact
-          </span>
-        </nav>
-        <button 
-          className="bg-[#4A6ACD] text-white px-4 py-2 rounded-full hover:bg-[#5A7ACD]"
-          onClick={() => navigate('/onboarding')}
-        >
-          Sign In
-        </button>
+
+        {/* Mobile Menu (Dropdown) */}
+        {isMenuOpen && (
+          <div className="md:hidden mt-4 space-y-4">
+            <nav className="flex flex-col space-y-2">
+              <a href="#about" className="hover:text-gray-300" onClick={() => setIsMenuOpen(false)}>About</a>
+              <a href="#values" className="hover:text-gray-300" onClick={() => setIsMenuOpen(false)}>Values</a>
+              <a href="#how-it-works" className="hover:text-gray-300" onClick={() => setIsMenuOpen(false)}>How It Works?</a>
+              <a href="#contact" className="hover:text-gray-300" onClick={() => setIsMenuOpen(false)}>Contact</a>
+            </nav>
+            <button 
+              className="bg-[#4A6ACD] text-white px-4 py-2 rounded-full hover:bg-[#5A7ACD] w-full"
+              onClick={() => { navigate('/onboarding'); setIsMenuOpen(false); }}
+            >
+              Sign In
+            </button>
+          </div>
+        )}
       </header>
 
-      {/* Features Section (About) */}
-      <section 
-        ref={aboutRef} 
-        className="w-full h-[750px] text-white py-16 flex flex-col md:flex-row items-center justify-center px-4 md:px-8 lg:px-16 max-w-7xl mx-auto border-b border-white"
-      >
-        <div className="flex flex-col items-start max-w-lg space-y-4">
+      {/* Features Section */}
+      <section className="w-full h-auto text-white py-16 flex flex-col md:flex-row items-center justify-center px-4 md:px-8 lg:px-16 max-w-7xl mx-auto border-b border-white">
+        <div className="flex flex-col items-start max-w-lg space-y-4 mb-8 md:mb-0">
           <h1 
             className="text-4xl font-bold mb-6 text-left" 
             style={{ 
@@ -105,7 +98,7 @@ export default function LandingPage() {
               gap: '10px', 
               borderWidth: '1px' 
             }}
-            onClick={() => navigate('/onboarding')} // Redirect to onboarding when clicked
+            onClick={() => navigate('/onboarding')} 
           >
             Get Early Access
           </button>
@@ -116,10 +109,7 @@ export default function LandingPage() {
       </section>
 
       {/* Values Section */}
-      <section 
-        ref={valuesRef} 
-        className="w-full h-[750px] bg-[#1C1C1C] py-16 text-white border-t border-b border-white"
-      >
+      <section className="w-full h-auto bg-[#1C1C1C] py-16 text-white border-t border-b border-white">
         <h2 className="text-5xl font-bold text-center mb-12" style={{ 
           fontFamily: 'DM Sans', 
           fontWeight: 700, 
@@ -129,7 +119,7 @@ export default function LandingPage() {
         }}>
           Values
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto px-4">
           {/* Mindful & Restorative */}
           <div className="bg-[#F6FF95] p-6 rounded-3xl flex flex-col h-[210px] w-full max-w-[317px] mx-auto">
             <div className="mb-4 ml-4">
@@ -169,7 +159,7 @@ export default function LandingPage() {
           {/* Rewarding & Motivating */}
           <div className="bg-[#F6FF95] p-6 rounded-3xl flex flex-col h-[210px] w-full max-w-[317px] mx-auto">
             <div className="mb-4 ml-4">
-              <img src="/Coin.png" alt="Coin Icon" className="w-11 h-11" />
+              <img src="/Coin.png" alt="Coin Icon" className="w-11 h-11"/>
             </div>
             <div className="flex flex-col items-center justify-start flex-grow mt-4">
               <h3 
@@ -202,7 +192,7 @@ export default function LandingPage() {
           {/* Secure & Private */}
           <div className="bg-[#F6FF95] p-6 rounded-3xl flex flex-col h-[210px] w-full max-w-[317px] mx-auto">
             <div className="mb-4 ml-4">
-              <img src="/Grid.png" alt="Secure Icon" className="w-11 h-11" />
+              <img src="/Grid.png" alt="Secure Icon" className="w-11 h-11"  />
             </div>
             <div className="flex flex-col items-center justify-start flex-grow mt-4">
               <h3 
@@ -271,10 +261,7 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section 
-        ref={howItWorksRef} 
-        className="w-full h-[750px] bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] py-16 text-white flex flex-col items-center justify-center border-t border-b border-white"
-      >
+      <section className="w-full h-auto bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] py-16 text-white flex flex-col items-center justify-center border-t border-b border-white">
         <h2 
           className="text-5xl font-bold text-center mb-16" 
           style={{ 
@@ -289,7 +276,7 @@ export default function LandingPage() {
         </h2>
         <div className="flex flex-col md:flex-row justify-center items-center space-y-12 md:space-y-0 md:space-x-8 max-w-7xl mx-auto">
           <div 
-            className="flex flex-col items-center" 
+            className="flex flex-col items-center mb-8 md:mb-0" 
             style={{ 
               width: '370px', 
               height: '149px', 
@@ -313,7 +300,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div 
-            className="flex flex-col items-center" 
+            className="flex flex-col items-center mb-8 md:mb-0" 
             style={{ 
               width: '370px', 
               height: '149px', 
@@ -337,7 +324,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div 
-            className="flex flex-col items-center" 
+            className="flex flex-col items-center mb-8 md:mb-0" 
             style={{ 
               width: '370px', 
               height: '149px', 
@@ -391,11 +378,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Start Your Journey Now Section (Contact) */}
-      <section 
-        ref={contactRef} 
-        className="w-full h-[450px] bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] py-16 text-white text-center border-t border-b border-white"
-      >
+      {/* Start Your Journey Now Section */}
+      <section className="w-full h-auto bg-gradient-to-b from-[#1A1A3D] via-[#2A2A5A] to-[#3A3A7A] py-16 text-white text-center border-t border-b border-white">
         <h2 
           className="text-5xl font-bold mt-37 mb-16" 
           style={{ 
@@ -408,9 +392,9 @@ export default function LandingPage() {
         >
           Start Your Journey Now
         </h2>
-        <div className="space-x-9 mt-40 flex justify-center">
+        <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-9 mt-40">
           <button 
-            className="bg-[#434CCD] text-white font-bold hover:bg-[#4A6ACD]" 
+            className="bg-[#434CCD] text-white font-bold hover:bg-[#4A6ACD] mb-4 md:mb-0" 
             style={{ 
               width: '222px', 
               height: '68px', 
@@ -419,7 +403,7 @@ export default function LandingPage() {
               gap: '10px', 
               borderWidth: '1px' 
             }}
-            onClick={() => navigate('/onboarding')} // Redirect to onboarding when clicked
+            onClick={() => navigate('/onboarding')} 
           >
             Sign In
           </button>
@@ -433,7 +417,7 @@ export default function LandingPage() {
               gap: '10px', 
               borderWidth: '1px' 
             }}
-            onClick={() => navigate('/onboarding')} // Redirect to onboarding when clicked
+            onClick={() => navigate('/onboarding')} 
           >
             Get Early Access
           </button>
