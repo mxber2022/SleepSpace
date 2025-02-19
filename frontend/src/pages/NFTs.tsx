@@ -7,6 +7,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppKitAccount } from '@reown/appkit/react';
 import { useNFT } from '../hooks/useNFT';
+import { NFTProgressStages } from '../components/NFTProgressStages';
 
 interface NFTCard {
   name: string;
@@ -314,7 +315,7 @@ export function NFTs() {
           </div>
 
           {/* Progress Card */}
-          {isConnected && <NFTProgressCard />}
+          {isConnected && <NFTProgressStages />}
 
           {/* NFT Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
