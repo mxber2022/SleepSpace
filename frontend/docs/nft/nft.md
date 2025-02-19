@@ -4,7 +4,7 @@ Welcome to SleepSpace nft! This innovative platform integrates sleep tracking wi
 
 ## Overview
 
-Our system rewards healthy sleep habits by granting NFT-based boosts. Some NFTs are available for public minting, while others must be earned by meeting personalized sleep goals.
+Our system rewards healthy sleep habits by granting NFT-based boosts. Dream Weaver NFTs are available for public minting, while others must be earned by meeting personalized sleep goals.
 
 ## NFTs
 
