@@ -17,6 +17,7 @@ contract SleepGoals {
         uint256 goalDuration; // New field for goal duration in hours
         bool achieved;
         string mode; // Mode of the goal ("secure" or "challenge")
+        uint256 createdAt;
     }
 
     // Mapping of user addresses to their goals
@@ -62,7 +63,8 @@ contract SleepGoals {
             depositAmount: _depositAmount,
             goalDuration: _goalDuration,
             achieved: false,
-            mode: _mode
+            mode: _mode,
+            createdAt: block.timestamp
         });
 
         emit GoalSet(msg.sender, _bedtime, _wakeTime, _duration, _quality, _depositAmount, _goalDuration, _mode);
@@ -108,7 +110,8 @@ contract SleepGoals {
         uint256 depositAmount,
         bool achieved,
         uint256 goalDuration, // Include goalDuration in return values
-        string memory mode // Include mode in return values
+        string memory mode, // Include mode in return values
+        uint256 createdAt
     ) {
         SleepGoal memory goal = userGoals[_user];
         return (
@@ -119,7 +122,8 @@ contract SleepGoals {
             goal.depositAmount,
             goal.achieved,
             goal.goalDuration,
-            goal.mode
+            goal.mode,
+            goal.createdAt
         );
     }
 }

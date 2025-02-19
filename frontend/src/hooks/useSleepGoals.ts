@@ -12,6 +12,7 @@ export interface SleepGoal {
   achieved: boolean;
   goalDuration: number;
   mode: string;
+  createdAt: number;
 }
 
 export function useSleepGoals() {
@@ -101,7 +102,8 @@ export function useSleepGoals() {
         depositAmount: goal.depositAmount,
         achieved: goal.achieved,
         goalDuration: Number(goal.goalDuration),
-        mode: goal.mode
+        mode: goal.mode,
+        createdAt: Number(goal.createdAt)
       };
     } catch (err) {
       console.error('Error getting user goal:', err);
