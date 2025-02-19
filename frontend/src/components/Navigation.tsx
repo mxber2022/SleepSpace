@@ -174,7 +174,7 @@ export function Navigation() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg ring-1 ring-primary-100/50 backdrop-blur-xl overflow-hidden"
+                          className="absolute right-0 mt-2 w-[calc(100%+1px)] bg-white rounded-xl shadow-lg ring-1 ring-primary-100/50 backdrop-blur-xl overflow-hidden"
                         >
                           <button
                             onClick={handleDisconnect}
