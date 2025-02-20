@@ -1,12 +1,25 @@
+import { useState, useEffect } from "react";
 import { Clock, Target, Coins, Sparkles, Eye, Calendar } from "lucide-react"; // Replace with your actual icon imports
+import { useSleepGoals } from '../hooks/useSleepGoals';
 
 const CurrentGoal = ({ currentGoal, setShowSetGoals }: any) => {
+  const { setSleepGoal, getUserGoal, isLoading, error, approvingStatus } = useSleepGoals();
+  const [dates, setDates] = useState<{ start: string; end: string } | null>(null);
 
-  const getDateDisplay = (days: number) => {
-    const startDate = new Date();
+  const getDateDisplay = async (days: number) => {
+    const goal = await getUserGoal();
+    if (!goal) {
+      return {
+        start: "N/A",
+        end: "N/A",
+      };
+    }
+  
+    const startDate = new Date(goal.createdAt * 1000); // Convert blockchain timestamp to JS Date
+    startDate.setHours(0, 0, 0, 0); // Normalize to start of day
     const endDate = new Date();
-    endDate.setDate(endDate.getDate() + days);
-
+    endDate.setDate(endDate.getDate() + days-1);
+  
     return {
       start: startDate.toLocaleDateString('en-US', {
         month: 'short',
@@ -21,8 +34,16 @@ const CurrentGoal = ({ currentGoal, setShowSetGoals }: any) => {
     };
   };
 
-  const dates = currentGoal ? getDateDisplay(currentGoal.goalDuration) : null;
-  
+  // Fetch dates when currentGoal changes
+  useEffect(() => {
+    if (currentGoal) {
+      (async () => {
+        const displayDates = await getDateDisplay(currentGoal.goalDuration);
+        setDates(displayDates);
+      })();
+    }
+  }, [currentGoal]);
+
   return currentGoal ? (
     <div className="bg-white rounded-2xl p-8 shadow-lg ring-1 ring-primary-100">
       <div className="flex items-center justify-between mb-8">
