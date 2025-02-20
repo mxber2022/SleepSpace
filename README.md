@@ -1,7 +1,12 @@
- ![SleepSpace Logo](data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2240%22%20fill%3D%22%23eda3b8%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2220%22%20fill%3D%22%23fff1f5%22%3E%3C%2Fcircle%3E%0A%20%20%3C%2Fsvg%3E)
 <div align="center">
+  <div style="background: white; padding: 20px; border-radius: 10px; display: inline-block; margin-bottom: 20px;">
+    <svg width="120" height="120" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" fill="#eda3b8" />
+      <circle cx="50" cy="50" r="20" fill="#fff1f5" />
+    </svg>
+  </div>
 
-  <h1>SleepSpace</h1>
+  <h1>SLEEPSPACE</h1>
   <p>Transform your sleep habits into rewards while maintaining complete privacy.</p>
 
   <p>
