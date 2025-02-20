@@ -100,7 +100,7 @@ export function Navigation() {
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center gap-10">
               <NavLink to="/sleep" active={location.pathname === '/sleep'}>
-                <BedDouble className="w-4 h-4" />
+                <Moon className="w-4 h-4" />
                 <span>Sleep</span>
               </NavLink>
               <NavLink to="/goals" active={location.pathname === '/goals'}>
