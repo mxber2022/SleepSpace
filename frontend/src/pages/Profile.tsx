@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { User, Calendar, Shield, Award, Moon } from 'lucide-react';
+import { User, Calendar, Shield, Medal, Moon, BadgeDollarSign } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function Profile() {
   const { user } = useAuth();
@@ -96,24 +97,49 @@ export function Profile() {
             <div className="bg-white rounded-2xl p-6 shadow-lg ring-1 ring-primary-100">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center">
-                  <Award className="w-4 h-4 text-primary-600" />
-                </div>
-                <h3 className="font-semibold text-night-900">Goals Met</h3>
-              </div>
-              <div className="text-3xl font-bold text-night-900">24</div>
-              <p className="text-sm text-night-600 mt-1">This month</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow-lg ring-1 ring-primary-100">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center">
-                  <Award className="w-4 h-4 text-primary-600" />
+                  <BadgeDollarSign className="w-4 h-4 text-primary-600" />
                 </div>
                 <h3 className="font-semibold text-night-900">Tokens Earned</h3>
               </div>
               <div className="text-3xl font-bold text-night-900">1,250</div>
               <p className="text-sm text-night-600 mt-1">Total SLEEP tokens</p>
             </div>
+            
+            
+            <div className="bg-white rounded-2xl p-6 shadow-lg ring-1 ring-primary-100 relative overflow-hidden">
+            <Link to="/NFTs" className="">
+              <div className="absolute top-2 right-2 w-3 h-3 bg-pink-500 rounded-full animate-pulse-dot"></div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center">
+                  <Medal className="w-4 h-4 text-primary-600" />
+                </div>
+                <h3 className="font-semibold text-night-900">NFT Badge</h3>
+              </div>
+              <p className="text-sm text-night-600 mt-1">Dream Weaver</p>
+              </Link>
+            </div>
+
+            <style jsx>{`
+              @keyframes pulse {
+                0% {
+                  transform: scale(1);
+                  background-color: #f472b6; /* Start with pink */
+                }
+                50% {
+                  transform: scale(1.2);
+                  background-color: #ffffff; /* Switch to white */
+                }
+                100% {
+                  transform: scale(1);
+                  background-color: #f472b6; /* End with pink */
+                }
+              }
+
+              .animate-pulse-dot {
+                animation: pulse 2s infinite ease-in-out;
+              }
+            `}</style>
+            
           </div>
         </div>
       </div>
