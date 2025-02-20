@@ -1,4 +1,4 @@
- ![SleepSpace Logo](/frontend/public/logo.svg)
+ ![SleepSpace Logo](data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2240%22%20fill%3D%22%23eda3b8%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2220%22%20fill%3D%22%23fff1f5%22%3E%3C%2Fcircle%3E%0A%20%20%3C%2Fsvg%3E)
 <div align="center">
 
   <h1>SleepSpace</h1>
