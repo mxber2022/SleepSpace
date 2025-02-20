@@ -1,10 +1,5 @@
 <div align="center">
-  <div style="background: white; padding: 20px; border-radius: 10px; display: inline-block; margin-bottom: 20px;">
-    <svg width="120" height="120" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="40" fill="#eda3b8" />
-      <circle cx="50" cy="50" r="20" fill="#fff1f5" />
-    </svg>
-  </div>
+ ![SleepSpace Logo](assets/logo.svg)
 
   <h1>SleepSpace</h1>
   <p>Transform your sleep habits into rewards while maintaining complete privacy.</p>
