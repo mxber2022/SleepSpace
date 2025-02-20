@@ -1,8 +1,10 @@
 <div align="center">
-  <svg width="100" height="100" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="40" fill="#eda3b8" />
-    <circle cx="50" cy="50" r="20" fill="#fff1f5" />
-  </svg>
+  <div style="background: white; padding: 20px; border-radius: 10px; display: inline-block; margin-bottom: 20px;">
+    <svg width="120" height="120" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" fill="#eda3b8" />
+      <circle cx="50" cy="50" r="20" fill="#fff1f5" />
+    </svg>
+  </div>
 
   <h1>SleepSpace - Sleep2Earn Platform</h1>
   <p>Transform your sleep habits into rewards while maintaining complete privacy.</p>
