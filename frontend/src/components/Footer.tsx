@@ -64,7 +64,7 @@ export function Footer() {
             <div className="flex items-center gap-2 text-body-sm text-night-600">
               <span>Made with</span>
               <Heart className="w-4 h-4 text-primary-500 animate-bounce-slight" />
-              <span>by SleepSpace © 2025</span>
+              <span>by SLEEPSPACE © 2025</span>
             </div>
             <a 
               href="#status" 
