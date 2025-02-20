@@ -11,6 +11,13 @@ import { useAppKitAccount } from '@reown/appkit/react';
 import { useDisconnect } from '@reown/appkit/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const SleepSpaceLogo = () => (
+  <svg width="40" height="40" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="40" fill="#eda3b8" />
+    <circle cx="50" cy="50" r="20" fill="#fff1f5" />
+  </svg>
+);
+
 export function Navigation() {
   const location = useLocation();
   const { isAuthenticated, isLoading, login, logout, user } = useAuth();
@@ -83,10 +90,10 @@ export function Navigation() {
             <Link to="/" className="flex items-center gap-2.5 group">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-radial from-primary-300/40 to-transparent blur-lg group-hover:from-primary-400/50 transition-colors"></div>
-                <Moon className="w-6 h-6 text-primary-600 relative group-hover:scale-110 transform transition-transform" />
+                <SleepSpaceLogo />
               </div>
               <span className="text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 font-display tracking-wider">
-                Sleep<span className="font-light">Space</span>
+                SLEEP<span className="font-semibold">SPACE</span>
               </span>
             </Link>
 

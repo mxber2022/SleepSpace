@@ -1,6 +1,13 @@
 import React from 'react';
 import { Moon, Twitter, Github, Heart, ExternalLink, Linkedin } from 'lucide-react';
 
+const SleepSpaceLogo = () => (
+  <svg width="40" height="40" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="40" fill="#eda3b8" />
+    <circle cx="50" cy="50" r="20" fill="#fff1f5" />
+  </svg>
+);
+
 export function Footer() {
   return (
     <footer className="relative mt-32">
@@ -20,11 +27,12 @@ export function Footer() {
           <div className="flex items-center gap-3 group">
             <div className="relative">
               <div className="absolute inset-0 bg-primary-200/30 blur-lg group-hover:bg-primary-300/40 transition-colors"></div>
-              <Moon className="w-8 h-8 text-primary-500 relative group-hover:scale-110 transform transition-transform" />
+              {/* <Moon className="w-8 h-8 text-primary-500 relative group-hover:scale-110 transform transition-transform" /> */}
+              <SleepSpaceLogo/>
             </div>
-            <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-night-900 via-primary-600 to-primary-400 font-display tracking-tight">
-              SleepSpace
-            </span>
+            <span className="text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 font-display tracking-wider">
+                SLEEP<span className="font-semibold">SPACE</span>
+              </span>
           </div>
           
           <p className="text-night-600 max-w-sm text-center leading-relaxed">
