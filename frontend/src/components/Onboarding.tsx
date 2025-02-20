@@ -119,7 +119,9 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
     {
       icon: <Moon className="w-12 h-12 text-primary-400 animate-spin-slow" />,
       title: "Hey there, Night Owl! 🌙",
-      description: "Ready to turn those Z's into cryptocurrency?",
+      description: <>
+      Welcome to SleepSpace! <br /> Ready to transform your Z's into rewards?
+    </>,
       input: (
         <input
           type="text"
@@ -199,7 +201,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
     {
       icon: <Party className="w-12 h-12 text-primary-400 animate-wiggle" />,
       title: "You're Ready to Sleep Like a Pro! 🌟",
-      description: "Remember: The early bird gets the worm, but the night owl gets the cryptocurrency!"
+      description: "Remember to set goals and join competition, Congrats!"
     }
   ];
 
@@ -261,7 +263,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                 <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative flex items-center gap-2 text-white font-medium">
                   <span>
-                    {step === steps.length - 1 ? "Let's Start!" : "Continue"}
+                    {step === steps.length - 1 ? "Let's Go !" : "Continue"}
                   </span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
