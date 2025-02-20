@@ -1,12 +1,119 @@
-import React, { useState } from 'react';
-import { Moon, Sun, CloudMoon, Bed, Coffee, AArrowDown as ZZZ, Brain, PartyPopper as Party } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Moon, Sun, CloudMoon, Bed, Coffee, AArrowDown as ZZZ, 
+  Brain, PartyPopper as Party, Wallet, Activity, 
+  CheckCircle, XCircle, ArrowRight, Loader2 
+} from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useAppKitAccount } from '@reown/appkit/react';
+import { useAppKit } from '@reown/appkit/react';
+
+interface OnboardingData {
+  name: string;
+  whoopConnected: boolean;
+  walletConnected: boolean;
+  walletAddress: string | null;
+  whoopId: string | null;
+  lastCompletedStep: number;
+}
 
 export function Onboarding({ onComplete }: { onComplete: () => void }) {
+  const { open } = useAppKit();
+  const { address, isConnected } = useAppKitAccount();
+  const { login, isAuthenticated, user, isLoading: whoopLoading } = useAuth();
   const [step, setStep] = useState(0);
-  const [name, setName] = useState(() => {
-    // Try to get name from localStorage
-    return localStorage.getItem('userName') || '';
+  const [name, setName] = useState('');
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false);
+  const [onboardingData, setOnboardingData] = useState<OnboardingData>({
+    name: '',
+    whoopConnected: false,
+    walletConnected: false,
+    walletAddress: null,
+    whoopId: null,
+    lastCompletedStep: -1
   });
+
+  // Load existing onboarding data and set initial step
+  useEffect(() => {
+    const savedData = localStorage.getItem('onboardingData');
+    if (savedData) {
+      const data = JSON.parse(savedData);
+      setOnboardingData(data);
+      setName(data.name);
+
+      // Set step to the first incomplete step
+      if (!data.name) {
+        setStep(0);
+      } else if (!data.walletConnected) {
+        setStep(1);
+      } else if (!data.whoopConnected) {
+        setStep(2);
+      } else {
+        setStep(3);
+      }
+    }
+  }, []);
+
+  // Update onboarding data when wallet connects
+  useEffect(() => {
+    if (isConnected && address) {
+      setOnboardingData(prev => ({
+        ...prev,
+        walletConnected: true,
+        walletAddress: address,
+        lastCompletedStep: Math.max(prev.lastCompletedStep, 1)
+      }));
+    }
+  }, [isConnected, address]);
+
+  // Update onboarding data when WHOOP connects
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setOnboardingData(prev => ({
+        ...prev,
+        whoopConnected: true,
+        whoopId: user.whoop_user_id,
+        lastCompletedStep: Math.max(prev.lastCompletedStep, 2)
+      }));
+    }
+  }, [isAuthenticated, user]);
+
+  // Save onboarding data to localStorage whenever it changes
+  useEffect(() => {
+    if (onboardingData.name || onboardingData.walletConnected || onboardingData.whoopConnected) {
+      localStorage.setItem('onboardingData', JSON.stringify(onboardingData));
+    }
+  }, [onboardingData]);
+
+  const handleConnectWallet = async () => {
+    setIsConnectingWallet(true);
+    try {
+      await open();
+    } catch (error) {
+      console.error('Failed to connect wallet:', error);
+    } finally {
+      setIsConnectingWallet(false);
+    }
+  };
+
+  const handleNext = () => {
+    if (step === 0 && !name) return;
+    
+    if (step === 0) {
+      setOnboardingData(prev => ({
+        ...prev,
+        name,
+        lastCompletedStep: Math.max(prev.lastCompletedStep, 0)
+      }));
+    }
+    
+    if (step === steps.length - 1) {
+      localStorage.setItem('onboardingCompleted', 'true');
+      onComplete();
+    } else {
+      setStep(step + 1);
+    }
+  };
 
   const steps = [
     {
@@ -24,14 +131,70 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
       )
     },
     {
-      icon: <Coffee className="w-12 h-12 text-primary-400 animate-bounce" />,
-      title: `${name}, are you tired of...being tired? 😴`,
-      description: "Don't worry, we won't make you do jumping jacks at midnight."
+      icon: <Wallet className="w-12 h-12 text-primary-400 animate-pulse" />,
+      title: "Connect Your Wallet",
+      description: "Link your wallet to start earning rewards for quality sleep.",
+      action: (
+        <button
+          onClick={handleConnectWallet}
+          disabled={isConnectingWallet || isConnected}
+          className={`mt-4 w-full px-4 py-2 rounded-lg flex items-center justify-center gap-2 ${
+            isConnected 
+              ? 'bg-green-500 text-white cursor-not-allowed'
+              : 'bg-primary-500 text-white hover:bg-primary-600'
+          } transition-colors`}
+        >
+          {isConnectingWallet ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Connecting...</span>
+            </>
+          ) : isConnected ? (
+            <>
+              <CheckCircle className="w-5 h-5" />
+              <span>Wallet Connected</span>
+            </>
+          ) : (
+            <>
+              <Wallet className="w-5 h-5" />
+              <span>Connect Wallet</span>
+            </>
+          )}
+        </button>
+      )
     },
     {
-      icon: <Brain className="w-12 h-12 text-primary-400 animate-pulse" />,
-      title: "Fun Fact Time! 🎯",
-      description: "Did you know? Giraffes only need 2 hours of sleep! But don't worry, we won't hold you to those standards."
+      icon: <img src="/Whoop.png" alt="Activity Icon" className="w-12 h-12 text-primary-400" />,
+      title: "Connect Your WHOOP",
+      description: "Link your WHOOP device to track your sleep metrics.",
+      action: (
+        <button
+          onClick={login}
+          disabled={whoopLoading || isAuthenticated}
+          className={`mt-4 w-full px-4 py-2 rounded-lg flex items-center justify-center gap-2 ${
+            isAuthenticated 
+              ? 'bg-green-500 text-white cursor-not-allowed'
+              : 'bg-primary-500 text-white hover:bg-primary-600'
+          } transition-colors`}
+        >
+          {whoopLoading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Connecting...</span>
+            </>
+          ) : isAuthenticated ? (
+            <>
+              <CheckCircle className="w-5 h-5" />
+              <span>WHOOP Connected</span>
+            </>
+          ) : (
+            <>
+              <Activity className="w-5 h-5" />
+              <span>Connect WHOOP</span>
+            </>
+          )}
+        </button>
+      )
     },
     {
       icon: <Party className="w-12 h-12 text-primary-400 animate-wiggle" />,
@@ -39,20 +202,6 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
       description: "Remember: The early bird gets the worm, but the night owl gets the cryptocurrency!"
     }
   ];
-
-  const handleNext = () => {
-    if (step === 0) {
-      if (!name) return;
-      // Save name to localStorage
-      localStorage.setItem('userName', name);
-    }
-    
-    if (step === steps.length - 1) {
-      onComplete();
-    } else {
-      setStep(step + 1);
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-night-950/90 backdrop-blur-lg z-50 flex items-center justify-center">
@@ -67,6 +216,22 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
           </div>
 
           <div className="relative">
+            {/* Progress Indicator */}
+            <div className="flex justify-center gap-2 mb-8">
+              {steps.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    index === step 
+                      ? 'bg-primary-500' 
+                      : index < step 
+                        ? 'bg-primary-400' 
+                        : 'bg-night-700'
+                  }`}
+                />
+              ))}
+            </div>
+
             <div className="flex justify-center mb-6">{steps[step].icon}</div>
             <h3 className="text-2xl font-bold text-white text-center mb-4 font-display">
               {steps[step].title}
@@ -75,16 +240,31 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               {steps[step].description}
             </p>
             {'input' in steps[step] && steps[step].input}
+            {'action' in steps[step] && steps[step].action}
+            
             <div className="flex justify-center mt-8">
               <button
                 onClick={handleNext}
-                className="group relative px-8 py-3 overflow-hidden rounded-xl"
-                disabled={step === 0 && !name}
+                className={`group relative px-8 py-2 overflow-hidden rounded-xl ${
+                  (step === 0 && !name) || 
+                  (step === 1 && !isConnected) || 
+                  (step === 2 && !isAuthenticated)
+                    ? 'opacity-50 cursor-not-allowed'
+                    : 'hover:-translate-y-1'
+                } transition-all duration-300`}
+                disabled={
+                  (step === 0 && !name) || 
+                  (step === 1 && !isConnected) || 
+                  (step === 2 && !isAuthenticated)
+                }
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
-                <span className="relative text-white font-medium">
-                  {step === steps.length - 1 ? "Let's Start!" : "Next"}
-                </span>
+                <div className="relative flex items-center gap-2 text-white font-medium">
+                  <span>
+                    {step === steps.length - 1 ? "Let's Start!" : "Continue"}
+                  </span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
               </button>
             </div>
           </div>
@@ -93,3 +273,6 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
     </div>
   );
 }
+
+
+// 

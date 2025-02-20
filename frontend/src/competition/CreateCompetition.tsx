@@ -20,7 +20,6 @@ export default function CreateCompetition({ showCreateModal, setShowCreateModal 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState<number | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
-  
   useEffect(() => {
     fetchCompetitions();
   }, []);
@@ -150,7 +149,7 @@ export default function CreateCompetition({ showCreateModal, setShowCreateModal 
                       onChange={(e) => setNewCompetition({ ...newCompetition, endDate: e.target.value })}
                       className="w-full px-4 py-2 rounded-xl border border-primary-100 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:border-transparent"
                     />
-                  </div>
+                  </div> 
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-night-700 mb-2">
