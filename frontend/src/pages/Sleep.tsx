@@ -120,7 +120,7 @@ export function Sleep() {
                     <BedDouble className="w-8 h-8 text-primary-600 relative" />
                   </div>
                   <h1 className="text-3xl md:text-4xl font-bold text-night-900 mb-4 font-display">
-                    Connect Your WHOOP Device
+                    Connect Your Device
                   </h1>
                   <p className="text-night-600 text-lg max-w-2xl">
                     Transform your sleep data into rewards. Connect your WHOOP
@@ -192,7 +192,7 @@ export function Sleep() {
                       ) : (
                         <>
                           <span className="text-white font-semibold tracking-wide">
-                            Connect WHOOP
+                            Connect
                           </span>
                         </>
                       )}

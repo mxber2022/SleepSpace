@@ -64,14 +64,15 @@ export function Claims() {
         credentials: "include",
         headers: {
           Accept: "application/json",
-        },
-      });
+        },      });
+
 
       if (!response.ok) {
         throw new Error("Failed to fetch sleep data");
       }
 
       const data = await response.json();
+      console.log("response: ", data);
       const processedData = data.records.map((record: SleepData) => ({
         ...record,
         claimed: false,
@@ -198,7 +199,7 @@ export function Claims() {
                     Connect to Claim Rewards
                   </h1>
                   <p className="text-night-600 text-lg max-w-2xl">
-                    Connect your WHOOP device to start claiming tokens for your
+                    Connect your device to start claiming tokens for your
                     quality sleep. Transform your rest into rewards!
                   </p>
                 </div>
@@ -264,7 +265,7 @@ export function Claims() {
                       ) : (
                         <>
                           <span className="text-white font-semibold tracking-wide">
-                            Connect WHOOP
+                            Connect
                           </span>
                         </>
                       )}
