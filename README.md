@@ -1,5 +1,5 @@
 <div align="center">
- ![SleepSpace Logo](/frontend/public/logo.svg)
+ ![SleepSpace Logo](/logo.svg)
 
   <h1>SleepSpace</h1>
   <p>Transform your sleep habits into rewards while maintaining complete privacy.</p>
