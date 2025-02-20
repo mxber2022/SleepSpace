@@ -1,4 +1,4 @@
- ![SleepSpace Logo](/logo.svg)
+ ![SleepSpace Logo](/frontend/public/logo.svg)
 <div align="center">
 
   <h1>SleepSpace</h1>
