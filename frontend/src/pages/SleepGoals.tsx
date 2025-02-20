@@ -163,7 +163,7 @@ export function SleepGoals() {
     if (isConnected) {
       fetchCurrentGoal();
     }
-  }, [isConnected]);
+  }, [isConnected, user]);
 
   const getQualityIndicator = (score: number | null) => {
     if (!score) return { color: 'text-night-600', bg: 'bg-night-50', text: 'No Data' };
