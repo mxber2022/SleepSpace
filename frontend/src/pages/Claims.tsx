@@ -6,7 +6,7 @@ import {
   Activity, 
   ChevronRight, 
   Gift, 
-  Shield, 
+  Gem, 
   Loader2, 
   BedDouble, 
   ArrowRight, 
@@ -16,11 +16,12 @@ import {
   TrendingUp,
   CheckCircle2,
   AlertCircle,
-  Sparkles,
+  HandCoins,
   Star
 } from 'lucide-react';
 import { format, parseISO } from "date-fns";
 import { useAuth } from "../context/AuthContext";
+import { useZKClaim } from "../hooks/useZKClaim";
 
 interface SleepData {
   id: number;
@@ -49,6 +50,7 @@ export function Claims() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [claimingId, setClaimingId] = useState<number | null>(null);
+  const { isLoading: zkloading, error: zkerror, zkclaim } = useZKClaim();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -149,7 +151,21 @@ export function Claims() {
 
   const handleClaim = async (id: number) => {
     setClaimingId(id);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    
+    /*
+      ZK Fetch
+      1. Url
+      2. regex
+      3. proof
+      4. onchain proof data verification.
+      5. claim token
+    */
+    // await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    console.log("id: ", id);
+    const proofresult = await zkclaim("proof");
+    console.log("success: ", proofresult);
+
     setSleepData((prev) =>
       prev.map((sleep) =>
         sleep.id === id ? { ...sleep, claimed: true } : sleep
@@ -208,7 +224,7 @@ export function Claims() {
                   <div className="bg-primary-50/50 rounded-xl p-6">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="p-2 bg-white rounded-lg">
-                        <Trophy className="w-5 h-5 text-primary-600" />
+                        <HandCoins className="w-5 h-5 text-primary-600" />
                       </div>
                       <h3 className="font-semibold text-night-900">
                         Earn Tokens
@@ -223,7 +239,7 @@ export function Claims() {
                   <div className="bg-primary-50/50 rounded-xl p-6">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="p-2 bg-white rounded-lg">
-                        <Star className="w-5 h-5 text-primary-600" />
+                        <Gem className="w-5 h-5 text-primary-600" />
                       </div>
                       <h3 className="font-semibold text-night-900">
                         Daily Rewards
@@ -238,7 +254,7 @@ export function Claims() {
                   <div className="bg-primary-50/50 rounded-xl p-6">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="p-2 bg-white rounded-lg">
-                        <Sparkles className="w-5 h-5 text-primary-600" />
+                        <TrendingUp className="w-5 h-5 text-primary-600" />
                       </div>
                       <h3 className="font-semibold text-night-900">
                         Bonus Rewards
