@@ -1,4 +1,4 @@
-import { BedDouble, Target, Coins } from 'lucide-react';
+import { Activity, Target, Coins } from 'lucide-react';
 
 export default function Working() {
     return(
@@ -21,7 +21,7 @@ export default function Working() {
                   <div className="relative group">
                     <div className="bg-white rounded-2xl p-8 shadow-lg ring-1 ring-primary-100 relative group-hover:-translate-y-1 transition-all duration-300 flex flex-col items-stretch min-h-[300px]">
                       <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center ring-8 ring-white">
-                        <BedDouble className="w-6 h-6 text-primary-600" />
+                        <Activity className="w-6 h-6 text-primary-600" />
                       </div>
                       <div className="pt-8 flex-1 flex flex-col justify-between">
                         <h3 className="text-xl font-bold text-night-900 mb-4 text-center">Connect Your Device</h3>
