@@ -52,6 +52,8 @@ contract Attestor {
 The package includes a list of predefined addresses for different networks that you can use when deploying your contract. You can find these in `contracts/Addresses.sol` or preferably in [Reclaim Documentation](https://docs.reclaimprotocol.org/solidity/supported-networks)
 
 
-npx hardhat run scripts/deploy.js --network baseSepolia
+
 
 npx hardhat compile
+npx hardhat run scripts/deploy.js --network baseSepolia
+npx hardhat verify --network sepolia 0x5A7413e61a265B9adB77C88FD02cc10464820110

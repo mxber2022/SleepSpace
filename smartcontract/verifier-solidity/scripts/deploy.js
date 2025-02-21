@@ -3,14 +3,10 @@ async function main() {
 
   console.log("Deploying contracts with the account:", deployer.address);
 
-  const HelloWorld = await ethers.getContractFactory("ZKClaim");
-  const contract = await HelloWorld.deploy();
+  const ZKClaim = await ethers.getContractFactory("ZKClaim");
+  const contract = await ZKClaim.deploy();
 
   console.log("Contract deployed at:", contract.address);
-
-  const saySomething = await contract.speak();
-
-  console.log("saySomething value:", saySomething);
 }
 
 main()

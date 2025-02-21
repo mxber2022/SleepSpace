@@ -24,7 +24,7 @@ const arbitrumScan: any = process.env.ARBITRUMSCAN_API_KEY;
 
 const config: HardhatUserConfig = {
   networks: {
-    ethereumSepolia: {
+    sepolia: {
       chainId: 11155111,
       url: "https://eth-sepolia.g.alchemy.com/v2/PRvrTo5Mqehu0WC5gbMvMx9ZsISAhozA",
       accounts: accounts,
@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      ethereumSepolia: ethsepoliaScan,
+      sepolia: "R4FGSY3BDVHIP3KXIEV3ET3PUTZP1B37ES",
       alfajores: celoScan,
       scrollSepolia: scrollScan,
       arbitrumOne: arbitrumScan,
