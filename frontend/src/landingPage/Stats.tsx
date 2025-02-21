@@ -19,9 +19,9 @@ export default function Stats() {
                 <div className="relative bg-white/50 backdrop-blur-xl rounded-2xl p-12 ring-1 ring-primary-200/50 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary-50/50 to-primary-100/50 opacity-50"></div>
                   <div className="relative grid md:grid-cols-3 gap-8 text-center">
-                    <StatCard number="10k+" label="Active Users" />
-                    <StatCard number="$500k+" label="Rewards Distributed" />
-                    <StatCard number="98%" label="Privacy Score" />
+                    <StatCard number="X" label="Active Users" />
+                    <StatCard number="X" label="Rewards Distributed" />
+                    <StatCard number="100%" label="Privacy Score" />
                   </div>
                 </div>
               </div>
