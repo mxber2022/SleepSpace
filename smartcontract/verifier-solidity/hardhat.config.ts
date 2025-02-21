@@ -18,15 +18,15 @@ dotenv.config();
 const accounts = [process.env.PRIVATE_KEY
 ].filter((key): key is string => !!key);
 const celoScan: any = process.env.CELOSCAN_API_KEY;
-const baseScan: any = process.env.BASESCAN_API_KEY;
+const ethsepoliaScan: any = process.env.ETHSEPOLIASCAN_API_KEY;
 const scrollScan: any = process.env.SCROLLSCAN_API_KEY;
 const arbitrumScan: any = process.env.ARBITRUMSCAN_API_KEY;
 
 const config: HardhatUserConfig = {
   networks: {
-    baseSepolia: {
-      chainId: 84532,
-      url: "https://sepolia.base.org",
+    ethereumSepolia: {
+      chainId: 11155111,
+      url: "https://eth-sepolia.g.alchemy.com/v2/PRvrTo5Mqehu0WC5gbMvMx9ZsISAhozA",
       accounts: accounts,
     },
     arbitrumOne: {
@@ -47,8 +47,8 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
+      ethereumSepolia: ethsepoliaScan,
       alfajores: celoScan,
-      baseSepolia: baseScan,
       scrollSepolia: scrollScan,
       arbitrumOne: arbitrumScan,
     },

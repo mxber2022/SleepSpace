@@ -39,6 +39,7 @@
     "@openzeppelin/contracts": "^4.9.2",
     "@openzeppelin/hardhat-upgrades": "^1.28.0",
     "@reclaimprotocol/crypto-sdk": "^1.4.0",
-    "@reclaimprotocol/verifier-solidity-sdk": "^1.0.4"
+    "@reclaimprotocol/verifier-solidity-sdk": "^1.0.4",
+    "dotenv": "^16.4.7"
   }
 }
