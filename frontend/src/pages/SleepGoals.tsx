@@ -192,7 +192,7 @@ export function SleepGoals() {
                 <div className="p-2 bg-primary-50 rounded-xl">
                   <Calendar className="w-6 h-6 text-primary-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-night-900 font-display">Sleep History</h2>
+                <h2 className="text-2xl font-bold text-night-900 font-display">Goal Insights</h2>
               </div>
               {sleepHistory.length > 0 && (
                 <div className="text-sm text-night-600">
