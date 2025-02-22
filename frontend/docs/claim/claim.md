@@ -8,8 +8,10 @@ SLEEPSPACE is a platform designed to reward users for maintaining optimal sleep 
 
 Users participating in SLEEPSPACE can claim tokens based on the following sleep metrics:
 
-- **Sleep Duration**: The total amount of sleep achieved per session.
-- **Sleep Time Consistency**: The regularity of sleep patterns maintained over time.
+<!-- - **Sleep Duration**: The total amount of sleep achieved.
+- **Sleep Time Consistency**: The regularity of sleep patterns maintained over time. -->
+
+Check nft.md
 
 These metrics are used to determine the amount of tokens users can claim, providing tangible rewards for demonstrating healthy sleep behaviors.
 
@@ -20,3 +22,7 @@ Promoting good sleep performance through rewards fosters healthier lifestyles an
 ## Future Enhancements
 
 SLEEPSPACE is committed to continuous improvement and plans to implement additional metrics and rewards to further optimize sleep habits among users. Stay updated as we evolve and enhance the platform.
+
+## Token Distribution
+
+Based on NFT Algorithm
