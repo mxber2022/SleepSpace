@@ -28,6 +28,12 @@ contract ZZZ is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausable, Owna
         _setTokenURI(tokenId, uri);
     }
 
+    /* Upgrade NFT Based on sleep data */
+    function upgradeURI(uint256 tokenId, string memory uri) public {
+        require(ownerOf(tokenId) == msg.sender, "You do not own this NFT");
+        _setTokenURI(tokenId, uri);
+    }
+
     // The following functions are overrides required by Solidity.
 
     function _update(address to, uint256 tokenId, address auth)
