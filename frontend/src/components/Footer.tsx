@@ -1,5 +1,12 @@
-import React from 'react';
-import { Moon, Twitter, Github, Heart, ExternalLink, Linkedin } from 'lucide-react';
+import React from "react";
+import {
+  Moon,
+  Twitter,
+  Github,
+  Heart,
+  ExternalLink,
+  Linkedin,
+} from "lucide-react";
 
 const SleepSpaceLogo = () => (
   <svg width="40" height="40" viewBox="0 0 100 100">
@@ -8,7 +15,7 @@ const SleepSpaceLogo = () => (
   </svg>
 );
 
-const TwitterIcon = (props:any) => (
+const TwitterIcon = (props: any) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     enableBackground="new 0 0 72 72"
@@ -31,7 +38,10 @@ export function Footer() {
       {/* Curved separator */}
       <div className="absolute -top-24 left-0 right-0 h-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary-50/20"></div>
-        <svg viewBox="0 0 1440 100" className="absolute bottom-0 w-full h-full fill-primary-100/20">
+        <svg
+          viewBox="0 0 1440 100"
+          className="absolute bottom-0 w-full h-full fill-primary-100/20"
+        >
           <path d="M0,0 C480,100 960,100 1440,0 L1440,100 L0,100 Z"></path>
         </svg>
       </div>
@@ -42,21 +52,34 @@ export function Footer() {
             <div className="relative">
               <div className="absolute inset-0 bg-primary-200/30 blur-lg group-hover:bg-primary-300/40 transition-colors"></div>
               {/* <Moon className="w-8 h-8 text-primary-500 relative group-hover:scale-110 transform transition-transform" /> */}
-              <SleepSpaceLogo/>
+              <SleepSpaceLogo />
             </div>
             <span className="text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 font-display tracking-wider">
-                SLEEP<span className="font-semibold">SPACE</span>
-              </span>
+              SLEEP<span className="font-semibold">SPACE</span>
+            </span>
           </div>
-          
+
           <p className="text-night-600 max-w-sm text-center leading-relaxed">
-            Transform your sleep habits into rewards while maintaining your privacy.
+            Transform your sleep habits into rewards while maintaining your
+            privacy.
           </p>
 
           <div className="flex gap-6">
-            <SocialLink href="https://x.com/Sleepspace4U" icon={<TwitterIcon className="w-5 h-5" />} label="Twitter" />
-            <SocialLink href="https://github.com/mxber2022/SleepSpace" icon={<Github className="w-5 h-5" />} label="GitHub" />
-            <SocialLink href="#linkedin" icon={<Linkedin className="w-5 h-5" />} label="LinkedIn" />
+            <SocialLink
+              href=""
+              icon={<TwitterIcon className="w-5 h-5" />}
+              label="Twitter"
+            />
+            <SocialLink
+              href="https://github.com/mxber2022/SleepSpace"
+              icon={<Github className="w-5 h-5" />}
+              label="GitHub"
+            />
+            <SocialLink
+              href="#linkedin"
+              icon={<Linkedin className="w-5 h-5" />}
+              label="LinkedIn"
+            />
           </div>
 
           {/* Bottom bar */}
@@ -66,8 +89,8 @@ export function Footer() {
               <Heart className="w-4 h-4 text-primary-500 animate-bounce-slight" />
               <span>by SLEEPSPACE © 2025</span>
             </div>
-            <a 
-              href="#status" 
+            <a
+              href="#status"
               className="text-body-sm text-night-600 hover:text-primary-600 transition-colors flex items-center gap-1 group"
             >
               <span className="w-2 h-2 rounded-full bg-green-500"></span>
@@ -81,13 +104,17 @@ export function Footer() {
   );
 }
 
-function SocialLink({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+function SocialLink({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}) {
   return (
-    <a 
-      href={href}
-      aria-label={label}
-      className="relative group"
-    >
+    <a href={href} aria-label={label} className="relative group">
       <div className="absolute inset-0 bg-primary-200/30 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
       <div className="relative bg-white p-3 rounded-full text-night-600 hover:text-primary-600 transition-colors hover:scale-110 transform duration-200 shadow-sm ring-1 ring-primary-100">
         {icon}
