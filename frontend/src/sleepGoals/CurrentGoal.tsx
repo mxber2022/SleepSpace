@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { Clock, Target, Coins, Sparkles, Eye, Calendar } from "lucide-react"; // Replace with your actual icon imports
-import { useSleepGoals } from '../hooks/useSleepGoals';
+import { useSleepGoals } from "../hooks/useSleepGoals";
 
 const CurrentGoal = ({ currentGoal, setShowSetGoals }: any) => {
-  const { setSleepGoal, getUserGoal, isLoading, error, approvingStatus } = useSleepGoals();
-  const [dates, setDates] = useState<{ start: string; end: string } | null>(null);
+  const { setSleepGoal, getUserGoal, isLoading, error, approvingStatus } =
+    useSleepGoals();
+  const [dates, setDates] = useState<{ start: string; end: string } | null>(
+    null
+  );
 
   const getDateDisplay = async (days: number) => {
     const goal = await getUserGoal();
@@ -14,23 +17,23 @@ const CurrentGoal = ({ currentGoal, setShowSetGoals }: any) => {
         end: "N/A",
       };
     }
-  
+
     const startDate = new Date(goal.createdAt * 1000); // Convert blockchain timestamp to JS Date
     startDate.setHours(0, 0, 0, 0); // Normalize to start of day
     const endDate = new Date();
-    endDate.setDate(endDate.getDate() + days-1);
-  
+    endDate.setDate(startDate.getDate() + goal.goalDuration) - 1;
+
     return {
-      start: startDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
+      start: startDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
       }),
-      end: endDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      })
+      end: endDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
     };
   };
 
@@ -107,11 +110,15 @@ const CurrentGoal = ({ currentGoal, setShowSetGoals }: any) => {
           <div className="space-y-2">
             <div className="flex justify-between text-night-600">
               <span>Amount</span>
-              <span className="font-medium">{currentGoal.depositAmount} SLEEP</span>
+              <span className="font-medium">
+                {currentGoal.depositAmount} SLEEP
+              </span>
             </div>
             <div className="flex justify-between text-night-600">
               <span>Duration</span>
-              <span className="font-medium">{currentGoal.goalDuration} days</span>
+              <span className="font-medium">
+                {currentGoal.goalDuration} days
+              </span>
             </div>
           </div>
         </div>
