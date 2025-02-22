@@ -321,7 +321,7 @@ export function NFTs() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-night-900 mb-4 font-display">
-              SleepSpace NFTs
+              {/* SleepSpace NFTs */}
             </h1>
             <p className="text-night-600 text-lg max-w-2xl mx-auto">
               Transform your sleep habits into digital assets. Each NFT provides
