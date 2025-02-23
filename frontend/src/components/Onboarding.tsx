@@ -32,6 +32,21 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
     whoopId: null,
     lastCompletedStep: -1
   });
+  //skip the onboarding
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 's' || event.key === 'S') {
+        localStorage.setItem('onboardingCompleted', 'true');
+        onComplete();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [onComplete]);
 
   // Load existing onboarding data and set initial step
   useEffect(() => {
