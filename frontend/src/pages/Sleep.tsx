@@ -327,7 +327,24 @@ export function Sleep() {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
               </div>
             ) : error ? (
-              <div className="text-center text-red-600">{error}</div>
+              // ... existing code ...
+<div className="bg-white ">
+<div className="flex flex-col items-center text-center">
+  <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-4">
+          <AlertCircle className="w-8 h-8 text-red-600" />
+        </div>
+        <h2 className="text-2xl font-bold text-night-900 mb-4">Oops! Something went wrong</h2>
+        <p className="text-red-600 text-lg">{error}</p>
+        {/* <button
+          onClick={() => setError('')}
+          className="mt-6 px-6 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors"
+        >
+          Try Again
+        </button> */}
+      </div>
+    
+</div>
+// ... existing code ...
             ) : (
               <div className="space-y-8">
                 {/* Weekly Trends Chart */}
