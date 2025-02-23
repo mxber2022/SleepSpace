@@ -15,13 +15,13 @@ contract ZZZ is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausable, Owna
     constructor(address initialOwner) ERC721("ZZZ", "ZZZ") Ownable(initialOwner) {}
 
     string[7] private _predefinedURIs = [
-        "ipfs://QmURI1", // 1. Dream Weaver
-        "ipfs://QmURI2", // 2. Circadian Tuner
-        "ipfs://QmURI3", // 3. Restful Pillow
-        "ipfs://QmURI4", // 4. Lucid Dream Catcher
-        "ipfs://QmURI5", // 5. Sleep Guardian
-        "ipfs://QmURI6", // 6. Melatonin Crystal
-        "ipfs://QmURI7"  // 7. Sleep Accelerator
+        "https://ipfs.io/ipfs/bafkreid3wkecsezp5q37xeqpnpxy2h7snenqvsqqvk3vazkzeuxxb7t3mu", // 1. Dream Weaver
+        "https://ipfs.io/ipfs/bafkreiefojwjknx6aznzwa3mkffvmvychoxlctjr3ejotadurz7ll3cx7q", // 2. Circadian Tuner
+        "https://ipfs.io/ipfs/bafkreicdcc44qrf7dunrb4whcy26cic5v52yyraq7fdq3gru2gel4rhgtm", // 3. Restful Pillow
+        "https://ipfs.io/ipfs/bafkreigadkp7tqjrxkvvoo4jp62skipdhaxxjukxr2myomopl4upajaebi", // 4. Lucid Dream Catcher
+        "https://ipfs.io/ipfs/bafkreihwvfczk7gfr5clqs4xk7iolszyyf3m3ujgetl4u44seea32xewle", // 5. Sleep Guardian
+        "https://ipfs.io/ipfs/bafkreietfm326kydjv4tdu2lj2wfyypx4k656qtrv5kjijbejh222m3lgm", // 6. Melatonin Crystal
+        "https://ipfs.io/ipfs/bafkreicumyn7oz42wvd63kjce63vgjd4bmsyxkxizj33foqgal5yy2xdye"  // 7. Sleep Accelerator
     ];
 
 

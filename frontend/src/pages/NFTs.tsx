@@ -33,6 +33,7 @@ interface NFTCard {
     border: string;
     icon: string;
   };
+  imageURL: string
 }
 
 const nfts: NFTCard[] = [
@@ -50,6 +51,7 @@ const nfts: NFTCard[] = [
       border: "border-blue-200",
       icon: "text-blue-500",
     },
+    imageURL: "https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidubgln7eaooxnu46myiyv5mcksdkcokt75vbak3fhbprabinm3oq"
   },
   {
     name: "Circadian Tuner",
@@ -67,6 +69,7 @@ const nfts: NFTCard[] = [
       border: "border-green-200",
       icon: "text-green-500",
     },
+    imageURL:"https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreickriv6hprmlhxw7tostwumwzatgnlmmauuxbyjvjszkaazu43q2m"
   },
   {
     name: "Restful Pillow",
@@ -84,6 +87,7 @@ const nfts: NFTCard[] = [
       border: "border-purple-200",
       icon: "text-purple-500",
     },
+    imageURL:"https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreihiobm7cwykra6scrqkwiwilkzphw2luykvj4vr2wzn2cdavyxaki"
   },
   {
     name: "Lucid Dream Catcher",
@@ -102,6 +106,7 @@ const nfts: NFTCard[] = [
       border: "border-indigo-200",
       icon: "text-indigo-500",
     },
+    imageURL:"https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreiblzgc3up2zzvgxmwizzrrbvzpcwvimkdouoy5z7pmdq5xhiizfuq"
   },
   {
     name: "Sleep Guardian",
@@ -116,6 +121,7 @@ const nfts: NFTCard[] = [
       border: "border-amber-200",
       icon: "text-amber-500",
     },
+    imageURL:"https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidw2zlzsihgmc2fwoscdujoge3xzq2uljddx7gbxa22yxdgvjicna"
   },
   {
     name: "Melatonin Crystal",
@@ -130,6 +136,7 @@ const nfts: NFTCard[] = [
       border: "border-pink-200",
       icon: "text-pink-500",
     },
+    imageURL:"https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreiay3stww3tc2ouxzm7slo62dpty4ywp67paufumd26zxvvcrx7a4a"
   },
   {
     name: "Sleep Accelerator Suit",
@@ -145,6 +152,7 @@ const nfts: NFTCard[] = [
       border: "border-primary-200",
       icon: "text-primary-500",
     },
+    imageURL:"https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreih7uuvkqthrq62evbh5gbtfbgr3nc54jtoki54ojxhbc3yfl4cnj4"
   },
 ];
 
@@ -157,6 +165,11 @@ export function NFTs() {
   const [userLevel, setUserLevel] = useState(1);
   const [userProgress, setUserProgress] = useState(35);
   const { isLoading, error, mintDreamWeaver } = useNFT();
+  const [selectedNFT, setSelectedNFT] = useState<NFTCard | null>(null);
+
+  const handleNFTClick = (nft: NFTCard) => {
+    setSelectedNFT(nft);
+  };
 
   const handleMint = async () => {
     if (!isConnected) return;
@@ -337,6 +350,7 @@ export function NFTs() {
             {nfts.map((nft) => (
               <div
                 key={nft.name}
+                onClick={() => handleNFTClick(nft)}
                 className="group relative bg-white rounded-2xl p-6 shadow-lg ring-1 ring-primary-100 hover:ring-primary-300 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
@@ -416,6 +430,44 @@ export function NFTs() {
               </div>
             ))}
           </div>
+{/* NFT Image Modal -onclick */}
+          <AnimatePresence>
+        {selectedNFT && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-night-950/50 backdrop-blur-sm flex items-center justify-center z-50"
+            onClick={() => setSelectedNFT(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full mx-4 relative overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-center">
+                <img
+                  src={selectedNFT.imageURL}
+                  alt={selectedNFT.name}
+                  className="w-full rounded-2xl object-contain mb-4 " // Custom 12px radius
+                />
+                <h2 className="text-2xl font-bold text-night-900 mb-2">
+                  {selectedNFT.name}
+                </h2>
+                <p className="text-night-600 mb-4">{selectedNFT.description}</p>
+                <button
+                  className="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors"
+                  onClick={() => setSelectedNFT(null)}
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
           {/* Info Section */}
           <div className="bg-white rounded-2xl p-8 shadow-lg ring-1 ring-primary-100 mt-12">
