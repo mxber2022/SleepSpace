@@ -48,6 +48,11 @@ export function SleepGoals() {
   const fetchCurrentGoal = async () => {
     try {
       const goal = await getUserGoal();
+
+      if(!goal?.mode){
+        return
+      }
+      
       if (goal) {
         setCurrentGoal({
           ...goal,
