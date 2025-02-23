@@ -55,5 +55,5 @@ The package includes a list of predefined addresses for different networks that 
 
 
 npx hardhat compile
-npx hardhat run scripts/deploy.js --network baseSepolia
-npx hardhat verify --network sepolia 0x5A7413e61a265B9adB77C88FD02cc10464820110
+npx hardhat run scripts/deploy.js --network sepolia 
+npx hardhat verify --network sepolia 0x72975969044961B1A23EC09c971718A59B3A6C8e

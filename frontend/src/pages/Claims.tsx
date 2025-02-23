@@ -149,7 +149,7 @@ export function Claims() {
     return Math.max(0, totalTokens);
   };
 
-  const handleClaim = async (id: number) => {
+  const handleClaim = async (id: number, tokens:any) => {
     setClaimingId(id);
     
     /*
@@ -163,7 +163,8 @@ export function Claims() {
     // await new Promise((resolve) => setTimeout(resolve, 1500));
 
     console.log("id: ", id);
-    const proofresult = await zkclaim("proof");
+    console.log("tokens: ", tokens);
+    const proofresult = await zkclaim("proof", String(tokens));
     console.log("success: ", proofresult);
 
     setSleepData((prev) =>
@@ -471,7 +472,7 @@ export function Claims() {
                           </div>
                         ) : (
                           <button
-                            onClick={() => handleClaim(sleep.id)}
+                            onClick={() => handleClaim(sleep.id, tokens)}
                             disabled={claimingId === sleep.id}
                             className="group relative px-6 py-2.5 rounded-xl overflow-hidden transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                           >

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { BrowserProvider, Eip1193Provider, ethers } from 'ethers';
+import { BrowserProvider, Eip1193Provider, ethers, parseEther } from 'ethers';
 import { verifyProof_ABI, ZKClaim_ADDRESS } from '../contracts/zkClaim';
 import { useAppKitAccount, useAppKitProvider } from '@reown/appkit/react';
 import { abi } from './proofABI';
@@ -30,7 +30,7 @@ export function useZKClaim() {
   const [error, setError] = useState<string | null>(null);
   const { walletProvider } = useAppKitProvider('eip155');
 
-  const zkclaim = useCallback(async (proof: any) => {
+  const zkclaim = useCallback(async (proof: any, amount: string) => {
     if (!isConnected || !address) {
       throw new Error('Wallet not connected');
     }
@@ -45,7 +45,7 @@ export function useZKClaim() {
       const contract = new ethers.Contract(ZKClaim_ADDRESS, abi, signer);
 
       // Call verifyProof function on contract with proof
-      const tx = await contract.verifyProof((tempProof));
+      const tx = await contract.verifyProof((tempProof), parseEther(amount));
       await tx.wait();
 
       return true;

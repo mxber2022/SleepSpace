@@ -20,4 +20,4 @@ export const verifyProof_ABI = [
     }
   ]
 
-export const ZKClaim_ADDRESS = "0x5A7413e61a265B9adB77C88FD02cc10464820110"; 
+export const ZKClaim_ADDRESS = "0x72975969044961B1A23EC09c971718A59B3A6C8e"; 
