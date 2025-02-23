@@ -82,7 +82,7 @@ export function Claims() {
       setSleepData(processedData);
     } catch (err) {
       console.error("Error fetching sleep data:", err);
-      setError("Failed to load sleep data");
+      setError(`Session expired, Please login again`);
     } finally {
       setIsLoading(false);
     }
@@ -311,13 +311,25 @@ export function Claims() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center text-red-600">
-            {error}
-          </div>
+<div className="min-h-screen bg-gradient-to-b from-primary-50 to-white pt-24 pb-16">
+  <div className="container mx-auto px-4">
+    <div className="max-w-4xl mx-auto bg-white rounded-2xl p-8 shadow-lg ring-1 ring-red-100">
+      <div className="flex flex-col items-center text-center">
+        <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mb-6">
+          <AlertCircle className="w-8 h-8 text-red-600" />
         </div>
+        <h2 className="text-2xl font-bold text-night-900 mb-4">Oops! Something went wrong</h2>
+        <p className="text-red-600 text-lg">{error}</p>
+        {/* <button
+          onClick={() => setError('')}
+          className="mt-6 px-6 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors"
+        >
+          Try Again
+        </button> */}
       </div>
+    </div>
+  </div>
+</div>
     );
   }
 

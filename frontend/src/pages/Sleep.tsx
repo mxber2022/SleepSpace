@@ -90,7 +90,7 @@ export function Sleep() {
         setSelectedSleep(data.records[0]); // Set first sleep record as selected
       } catch (err) {
         console.error("Error fetching sleep data:", err);
-        setError("Failed to load sleep data");
+        setError("Session Expired, Please login again");
       } finally {
         setIsLoading(false);
       }
