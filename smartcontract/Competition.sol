@@ -103,7 +103,7 @@ contract Competition is Ownable(address(msg.sender))  {
         address[] memory participants = competition.participants;
         uint256 totalPrize = competition.prizePool;
 
-        // Distribute rewards (example: top 3 winners)
+        // Distribute rewards
         if (participants.length >= 1) {
             rewardToken.transfer(participants[0], (totalPrize * 50) / 100); // 50% to 1st place
         }

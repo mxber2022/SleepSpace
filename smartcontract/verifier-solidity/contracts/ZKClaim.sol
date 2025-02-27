@@ -19,6 +19,9 @@ contract ZKClaim {
        Reclaim(reclaimAddress).verifyProof(proof);
        // Your business logic upon successful verification
        // Example: Verify that proof.context matches your expectations
+       // TO do in future: 
+       // 1. Implement onchain token calculation may be, 
+       // 2. abstract data
        withdrawTokens(amount);
    }
 
