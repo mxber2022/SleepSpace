@@ -88,33 +88,50 @@ npm run dev
 ### NFT Tiers
 
 1. **Dream Weaver (Common)**
+   - Your entry-level booster—mint it and start benefiting right away!
    - 3% boost to nightly sleep-to-earn rewards
-   - Public mint available
+   - Public Mint Available
+   - ![Dream Weaver](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidubgln7eaooxnu46myiyv5mcksdkcokt75vbak3fhbprabinm3oq)
 
 2. **Circadian Tuner (Uncommon)**
-   - 5% bonus when hitting targeted sleep performance
-   - Earned through consistent sleep patterns
+   - Adjusts to your unique sleep cycle for optimized performance.
+   - 5% bonus when hitting your weekly targeted sleep performance
+   - Meet personalized sleep goals
+   - ![Circadian Tuner](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreickriv6hprmlhxw7tostwumwzatgnlmmauuxbyjvjszkaazu43q2m)
 
 3. **Restful Pillow (Rare)**
-   - 15% base boost to earnings
+   - A powerful boost for consistent quality sleep.
+   - 10% base boost to earnings
    - Additional 5% boost for deep sleep > 25%
+   - Achieve 8 hours of sleep for 7 consecutive nights
+   - ![Restful Pillow](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreihiobm7cwykra6scrqkwiwilkzphw2luykvj4vr2wzn2cdavyxaki)
 
 4. **Lucid Dream Catcher (Epic)**
-   - 20% bonus on nights with lucid sleep
+   - Master the art of lucid sleep for enhanced rewards.
+   - 15% bonus on nights with lucid sleep
    - 10% bonus for 4/7 lucid sleep nights
+   - Achieve optimal sleep quality with consistent REM cycles for 2 weeks
+   - ![Lucid Dream Catcher](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreiblzgc3up2zzvgxmwizzrrbvzpcwvimkdouoy5z7pmdq5xhiizfuq)
 
 5. **Sleep Guardian (Legendary)**
+   - The ultimate protector of perfect sleep patterns.
    - Double earnings for 14 days
    - Triple earnings for 3 nights after 5 uninterrupted nights
+   - Maintain 90%+ sleep score for 30 consecutive days
+   - ![Sleep Guardian](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidw2zlzsihgmc2fwoscdujoge3xzq2uljddx7gbxa22yxdgvjicna)
 
 6. **Melatonin Crystal (Mythical)**
+   - Harness the power of perfect sleep balance.
    - Triple base earnings
    - Stackable 25% boost every 10 days (max 75%)
+   - 8 hours of high-quality sleep for 30 consecutive days
+   - ![Melatonin Crystal](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidspmybrkl5qpjojnlgw6l4q2nfynujul75ogmdqfg3h5mhnryyoq)
 
 7. **Sleep Accelerator Suit (Ultra-Legendary)**
    - 50% bonus on all earnings for 30 days
    - Double rewards on weekends with 85%+ weekly score
    - 15-day extension on new personal best scores
+   - ![Sleep Accelerator Suit](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreieffuyx2ovbskhu27gjdzh4hf7qxowrlkdzlzmh5xklteglhv4wxe)
 
 ## API Integration
 
@@ -172,7 +189,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   Made with ❤️ by the SleepSpace Team
 </div>
 
-SleepSpace Token Address: 0xb507eEF94DB8AFa44BE58Fb687c5234FddF14b44
-SleepGoals Contract Adress: 0x93c4B53C13Ad9134c3E02ad6AA3e28d8b0105669
+## Smartcontract
 
-https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafybeibe3hmyo43s5akx7xzm4cqy2zozipjkjmo5gs4m3w3ckuaildyzvu
+SleepSpace Token Address: 0xb507eEF94DB8AFa44BE58Fb687c5234FddF14b44  
+SleepGoals Contract Address: 0x93c4B53C13Ad9134c3E02ad6AA3e28d8b0105669
