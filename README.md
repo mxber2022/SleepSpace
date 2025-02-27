@@ -20,7 +20,7 @@
 
 ## Overview
 
-SleepSpace is a revolutionary Web3 platform that incentivizes healthy sleep habits by rewarding users with cryptocurrency tokens. By connecting your WHOOP device and meeting sleep goals, you can earn rewards while maintaining complete privacy through advanced zkTLS technology.
+SleepSpace is a Sleep2Earn platform that tackles sleep deprivation by rewarding users with tokens for maintaining healthy sleep habits. Using zkTLS (via the Reclaim protocol), WE ensure privacy protection while promoting better productivity and mental well-being.
 
 ## Features
 
