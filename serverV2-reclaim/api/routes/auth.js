@@ -1,5 +1,7 @@
 import express from "express";
 import passport from "passport";
+const { ReclaimClient } = require("@reclaimprotocol/zk-fetch");
+const { transformForOnchain } = require("@reclaimprotocol/js-sdk");
 
 const router = express.Router();
 
@@ -8,7 +10,7 @@ router.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// Auth routes
+// Auth routes 
 router.get(
   "/auth/whoop",
   (req, res, next) => {
@@ -104,5 +106,58 @@ router.post("/auth/logout", (req, res) => {
     });
   });
 });
+
+router.post("/whoop/verify-proof", async (req, res) => {
+
+  if (!req.isAuthenticated()) {
+    console.log("User not authenticated");
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  
+  const reclaimClient = new ReclaimClient(
+    process.env.APP_ID,
+    process.env.APP_SECRET
+  );
+
+  try {
+    const { access_token, sleepId } = req.body;
+
+    if (!access_token || !sleepId) {
+      return res.status(400).json({ error: "Missing access_token or sleepId" });
+    }
+
+    const url = `https://api.prod.whoop.com/developer/v1/activity/sleep/${sleepId}`;
+
+    const privateOptions = {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    };
+
+    const publicOptions = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    };
+
+    const proof = await reclaimClient.zkFetch(url, publicOptions, privateOptions);
+
+    if (!proof) {
+      return res.status(500).json({ error: "Failed to generate proof" });
+    }
+
+    console.log("Generated Proof:", proof);
+
+    res.json({
+      success: true,
+      proof
+    });
+  } catch (error) {
+    console.error("Error verifying proof:", error.message);
+    res.status(500).json({ error: "Failed to verify proof", details: error.message });
+  }
+});
+
 
 export default router;

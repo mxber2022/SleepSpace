@@ -13,6 +13,8 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "passport": "^0.7.0",
-    "passport-oauth2": "^1.7.0"
+    "passport-oauth2": "^1.7.0",
+    "@reclaimprotocol/js-sdk": "^2.2.1",
+    "@reclaimprotocol/zk-fetch": "^0.3.1"
   }
 }
