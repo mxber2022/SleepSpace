@@ -113,7 +113,7 @@ router.post("/whoop/verify-proof", async (req, res) => {
     console.log("User not authenticated");
     return res.status(401).json({ error: "Not authenticated" });
   }
-  
+
   const reclaimClient = new ReclaimClient(
     process.env.APP_ID,
     process.env.APP_SECRET
@@ -154,8 +154,8 @@ router.post("/whoop/verify-proof", async (req, res) => {
       proof
     });
   } catch (error) {
-    console.error("Error verifying proof:", error.message);
-    res.status(500).json({ error: "Failed to verify proof", details: error.message });
+    console.error("Error getting proof:", error.message);
+    res.status(500).json({ error: "Failed to get proof", details: error.message });
   }
 });
 
