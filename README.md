@@ -32,6 +32,10 @@ SleepSpace is a Sleep2Earn platform that tackles sleep deprivation by rewarding 
 - 🎮 **Gamification**: Level up and earn NFTs for consistent performance
 - 📊 **Analytics**: Detailed insights into your sleep patterns
 
+## Presentation
+
+https://www.canva.com/design/DAGgEwzJPYA/z0M9IU1BXWvirtJLE_IRJQ/edit?utm_content=DAGgEwzJPYA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
 ## Getting Started
 
 ### Prerequisites
