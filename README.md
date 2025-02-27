@@ -83,7 +83,6 @@ npm run dev
 - Custom reward distribution system
 - Goal verification mechanisms
 
-## Smart Contracts
 
 ### NFT Tiers
 
@@ -91,47 +90,53 @@ npm run dev
    - Your entry-level booster—mint it and start benefiting right away!
    - 3% boost to nightly sleep-to-earn rewards
    - Public Mint Available
-   - ![Dream Weaver](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidubgln7eaooxnu46myiyv5mcksdkcokt75vbak3fhbprabinm3oq)
+   - <img src="https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidubgln7eaooxnu46myiyv5mcksdkcokt75vbak3fhbprabinm3oq" alt="Dream Weaver" width="200" style="border-radius: 10px;"/>
 
 2. **Circadian Tuner (Uncommon)**
    - Adjusts to your unique sleep cycle for optimized performance.
    - 5% bonus when hitting your weekly targeted sleep performance
    - Meet personalized sleep goals
-   - ![Circadian Tuner](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreickriv6hprmlhxw7tostwumwzatgnlmmauuxbyjvjszkaazu43q2m)
+   - <img src="https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreickriv6hprmlhxw7tostwumwzatgnlmmauuxbyjvjszkaazu43q2m" alt="Circadian Tuner" width="200" style="border-radius: 10px;"/>
 
 3. **Restful Pillow (Rare)**
    - A powerful boost for consistent quality sleep.
    - 10% base boost to earnings
    - Additional 5% boost for deep sleep > 25%
    - Achieve 8 hours of sleep for 7 consecutive nights
-   - ![Restful Pillow](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreihiobm7cwykra6scrqkwiwilkzphw2luykvj4vr2wzn2cdavyxaki)
+   - <img src="https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreihiobm7cwykra6scrqkwiwilkzphw2luykvj4vr2wzn2cdavyxaki" alt="Restful Pillow" width="200" style="border-radius: 10px;"/>
 
 4. **Lucid Dream Catcher (Epic)**
    - Master the art of lucid sleep for enhanced rewards.
    - 15% bonus on nights with lucid sleep
    - 10% bonus for 4/7 lucid sleep nights
    - Achieve optimal sleep quality with consistent REM cycles for 2 weeks
-   - ![Lucid Dream Catcher](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreiblzgc3up2zzvgxmwizzrrbvzpcwvimkdouoy5z7pmdq5xhiizfuq)
+   - <img src="https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreiblzgc3up2zzvgxmwizzrrbvzpcwvimkdouoy5z7pmdq5xhiizfuq" alt="Lucid Dream Catcher" width="200" style="border-radius: 10px;"/>
 
 5. **Sleep Guardian (Legendary)**
    - The ultimate protector of perfect sleep patterns.
    - Double earnings for 14 days
    - Triple earnings for 3 nights after 5 uninterrupted nights
    - Maintain 90%+ sleep score for 30 consecutive days
-   - ![Sleep Guardian](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidw2zlzsihgmc2fwoscdujoge3xzq2uljddx7gbxa22yxdgvjicna)
+   - <img src="https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidw2zlzsihgmc2fwoscdujoge3xzq2uljddx7gbxa22yxdgvjicna" alt="Sleep Guardian" width="200" style="border-radius: 10px;"/>
 
 6. **Melatonin Crystal (Mythical)**
    - Harness the power of perfect sleep balance.
    - Triple base earnings
    - Stackable 25% boost every 10 days (max 75%)
    - 8 hours of high-quality sleep for 30 consecutive days
-   - ![Melatonin Crystal](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidspmybrkl5qpjojnlgw6l4q2nfynujul75ogmdqfg3h5mhnryyoq)
+   - <img src="https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreidspmybrkl5qpjojnlgw6l4q2nfynujul75ogmdqfg3h5mhnryyoq" alt="Melatonin Crystal" width="200" style="border-radius: 10px;"/>
 
 7. **Sleep Accelerator Suit (Ultra-Legendary)**
    - 50% bonus on all earnings for 30 days
    - Double rewards on weekends with 85%+ weekly score
    - 15-day extension on new personal best scores
-   - ![Sleep Accelerator Suit](https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreieffuyx2ovbskhu27gjdzh4hf7qxowrlkdzlzmh5xklteglhv4wxe)
+   - <img src="https://sapphire-following-turkey-778.mypinata.cloud/ipfs/bafkreieffuyx2ovbskhu27gjdzh4hf7qxowrlkdzlzmh5xklteglhv4wxe" alt="Sleep Accelerator Suit" width="200" style="border-radius: 10px;"/>
+
+## Smartcontract
+
+SleepSpace Token Address: 0xb507eEF94DB8AFa44BE58Fb687c5234FddF14b44  
+SleepGoals Contract Address: 0x93c4B53C13Ad9134c3E02ad6AA3e28d8b0105669
+
 
 ## API Integration
 
@@ -189,7 +194,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   Made with ❤️ by the SleepSpace Team
 </div>
 
-## Smartcontract
 
-SleepSpace Token Address: 0xb507eEF94DB8AFa44BE58Fb687c5234FddF14b44  
-SleepGoals Contract Address: 0x93c4B53C13Ad9134c3E02ad6AA3e28d8b0105669
